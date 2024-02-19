@@ -9,15 +9,14 @@
             <span class="absolute-cat-num"><?=$total ?></span>
             <span>All Products</span>
         </a>
-<?php   foreach($categories as $cat){
+<?php   foreach($statuses as $status){
 ?>      <a href="" class="category_button text-white text-decoration-none position-relative py-3 my-1 rounded-2 text-center w-50">
-            <span class="absolute-cat-num"><?=$cat['prod_count'] ?></span>
-            <span><?= $cat['category'] ?></span>
+            <span><?= $status['status'] ?></span>
         </a>
 <?php   }
 ?>
     </div>
-    <div class="col-10" id="order_cards">
+    <div class="col-10" id="product_cards">
     </div>
 </div>
     

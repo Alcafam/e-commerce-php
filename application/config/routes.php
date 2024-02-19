@@ -10,11 +10,17 @@ $route['logout'] = 'users/logout';
 
 $route['registration'] = 'users/register';
 $route['registration/registration_process'] = 'users/registration_process';
+$route['dashboard'] = 'users/dashboard';
 
 // ADMIN
-$route['dashboard'] = 'users/dashboard';
-$route['get_order_html'] = 'orders/get_order_html/$1';
-$route['get_filtered_orders/(:any)'] = 'orders/get_filtered_orders/$1';
+$route['orders'] = 'orders';
+$route['get_order_html'] = 'orders/get_order_html';
+$route['products'] = 'products';
+$route['get_product_html'] = 'products/get_product_html';
+
+//USER
+$route['catalog'] = 'catalogs';
+$route['get_catalog_html'] = 'catalogs/get_catalog_html';
 
 $route['404_override'] = '';
 $route['translate_uri_dashes'] = FALSE;

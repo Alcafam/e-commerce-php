@@ -1,7 +1,7 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 
-class Orders extends CI_Controller {
+class Catalogs extends CI_Controller {
 
 	function __construct(){
 		parent::__construct();
@@ -9,38 +9,34 @@ class Orders extends CI_Controller {
         $this->load->model('Product');
  	}
 
-    function init(){
+     function init(){
 		$sess_like_data['name'] = $this->session->userdata('name');
 		$sess_like_data['user_id'] = $this->session->userdata('user_id');
         $sess_like_data['role'] = $this->session->userdata('role');
 		return $sess_like_data;
 	}
 
-    function load_view($title){
-        $view_data['title'] = $title;
-        $this->load->view('layout/header', $view_data);
-        $this->load->view('layout/navbar', $view_data);
-    }
-
 	function index(){	
         if(!$this->session->userdata('user_id')){ 
             redirect(base_url('login'));
         }else{
-            if($this->session->userdata('user_id') == 0){
-                redirect(base_url('catalog'));
+            if($this->session->userdata('user_id') == 1){
+                redirect(base_url('orders'));
             }else{
                 $view_data=$this->init();
-                $view_data['statuses'] = $this->Product->get_all_status();
+                $view_data['categories'] = $this->Product->get_all_categories();
                 $view_data['total'] = count($this->Product->get_all_product());
-
-                $this->load_view("Order Dashboard - Emmeness");
-                $this->load->view('layout/side_nav');
-                $this->load->view('layout/status_layout',$view_data);
+    
+                $view_data['title'] = "Order Dashboard - Emmeness";
+                $this->load->view('layout/header', $view_data);
+                $this->load->view('layout/navbar', $view_data);
+                $this->load->view('layout/user_side_nav');
+                $this->load->view('layout/category_layout');
             }
         }
 	}
 
-    function get_order_html(){
+    function get_catalog_html(){
         if($this->input->get()){
             $view_data['products']=$this->Product->get_all_product();
             $view_data['filter'] = "All Products(".count($view_data['products']).")";
