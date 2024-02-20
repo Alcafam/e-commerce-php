@@ -40,12 +40,10 @@ class Products extends CI_Controller {
             $filters = $this->input->post();
             $view_data['products']=$this->Product->get_filtered_product($filters);
             if(!empty($filters['search_filter'])){
-                $view_data['category'] = $filters['category']." (".count($view_data['products']).")";
+                $view_data['filter'] = $filters['category']." (".count($view_data['products']).")";
             }else{
                 $view_data['filter'] = "Search Result (".count($view_data['products']).")";
             }
-            // var_dump($view_data['products']);
-            // die();
         }else{
             $view_data['products']=$this->Product->get_all_product();
             $view_data['filter'] = "All Products(".count($view_data['products']).")";
@@ -53,4 +51,19 @@ class Products extends CI_Controller {
         $this->load->view('dashboard/product_dashboard', $view_data);
     }
 
+    function get_product_table(){
+        if($this->input->post()){
+            $filters = $this->input->post();
+            $view_data['products']=$this->Product->get_filtered_product($filters);
+            if(!empty($filters['search_filter'])){
+                $view_data['filter'] = $filters['category']." (".count($view_data['products']).")";
+            }else{
+                $view_data['filter'] = "Search Result (".count($view_data['products']).")";
+            }
+        }else{
+            $view_data['products']=$this->Product->get_all_product();
+            $view_data['filter'] = "All Products(".count($view_data['products']).")";
+        }
+        $this->load->view('dashboard/product_table', $view_data);
+    }
 }

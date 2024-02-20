@@ -26,18 +26,38 @@
 </div>
 
 <div class="modal" tabindex="-1" id="add_product_modal">
-    <div class="modal-dialog">
-        <div class="modal-content">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content bg-white">
             <div class="modal-header">
                 <h5 class="modal-title">ADD PRODUCT</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-        <div class="modal-body">
-            <p>Modal body text goes here.</p>
-        </div>
-        <div class="modal-footer">
-            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-            <button type="button" class="btn btn-primary">Save changes</button>
+        <div class="modal-body bg-white">
+            <form id="add_form">
+            <div class="mb-3">
+                <input type="text" class="form-control" name="product" placeholder="Name">
+            </div>
+
+            <div class="mb-3">
+                <textarea class="form-control" name="description"></textarea>
+            </div>
+
+            <div class="mb-3 row mx-1">
+                <select class="form-control col d-inline-block mx-1" name="category">
+                    <option>--- Select Category ---</option>
+<?php           foreach($categories as $cat){
+?>                  <option value="<?= $cat['id'] ?>"><?= $cat['category'] ?></option>
+<?php           }
+?>              </select>
+                <input type="text" class="form-control col d-inline-block mx-1" name="price" placeholder="Price">
+                <input type="text" class="form-control col d-inline-block mx-1" name="stock" placeholder="Stocks">
+            </div>
+
+            <div class="mb-3">
+                <label for="product" class="form-label">Email address</label>
+                <input type="text" class="form-control" id="product" name="product">
+            </div>
+            </form>
         </div>
         </div>
     </div>

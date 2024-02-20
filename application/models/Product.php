@@ -35,22 +35,16 @@ class Product extends CI_Model
             LEFT JOIN categories c
                 ON c.id = p.category_id
             WHERE 
-                (p.product_name LIKE '%?%'
-                OR p.description LIKE '%?%'
-                OR p.price LIKE '%?%')
-                AND c.category = ?";
-        $values = array(
-            $this->security->xss_clean($filters['search_filter']), 
-            $this->security->xss_clean($filters['search_filter']),
-            $this->security->xss_clean($filters['search_filter']),
-            $this->security->xss_clean($filters['category'])
-        );
-        
-        $results = $this->db->query($query, $values)->result_array();
-        var_dump($filters);
-        die();
-        // $results = $this->decode_images($results);
-        // return $results;
+                (p.product_name LIKE '%{$this->security->xss_clean($filters['search_filter'])}%'
+                OR p.description LIKE '%{$this->security->xss_clean($filters['search_filter'])}%'
+                OR p.price LIKE '%{$this->security->xss_clean($filters['search_filter'])}%')";
+
+        if(!empty($filters['category'])){
+            $query .= " AND c.category = '{$this->security->xss_clean($filters['category'])}'";
+        }
+        $results = $this->db->query($query)->result_array();
+        $results = $this->decode_images($results);
+        return $results;
     }
 // ============= END OF GETTERS ============= //
 

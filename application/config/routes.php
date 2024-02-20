@@ -16,7 +16,7 @@ $route['dashboard'] = 'users/dashboard';
 $route['orders'] = 'orders';
 $route['get_order_html'] = 'orders/get_order_html';
 $route['products'] = 'products';
-$route['get_product_html'] = 'products/get_product_html';
+$route['get_product_table'] = 'products/get_product_table';
 
 //USER
 $route['catalog'] = 'catalogs';
