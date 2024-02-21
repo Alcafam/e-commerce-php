@@ -2,7 +2,7 @@
     <form id="filter_form" method="POST" class="text-center d-inline-block w-75">
         <input class="form-control me-2" type="search" name="search_filter" id="search_filter" placeholder="search product" aria-label="Search">
     </form>
-<?php   if(isset($role)){
+<?php   if(isset($role) && $role == 1){
 ?>          <button class="btn btn-success d-inline-block mx-3 mb-1" id="add_product">Add a Product</button>
 <?php   }
 ?>
@@ -25,32 +25,32 @@
     </div>
 </div>
 
-<div class="modal" tabindex="-1" id="add_product_modal">
+<div class="modal" tabindex="-1" id="add_update_product_modal">
     <div class="modal-dialog modal-lg">
         <div class="modal-content bg-white">
             <div class="modal-header">
-                <h5 class="modal-title">ADD PRODUCT</h5>
+                <h5 class="modal-title" id="modal_title"></h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
         <div class="modal-body bg-white">
-            <form id="add_form">
+            <form id="add_update_form">
             <div class="mb-3">
-                <input type="text" class="form-control" name="product" placeholder="Name">
+                <input type="text" class="form-control" name="product" id="product" placeholder="Name">
             </div>
 
             <div class="mb-3">
-                <textarea class="form-control" name="description"></textarea>
+                <textarea class="form-control" name="description" id="description"></textarea>
             </div>
 
             <div class="mb-3 row mx-1">
-                <select class="form-control col d-inline-block mx-1" name="category">
+                <select class="form-control col d-inline-block mx-1" name="category" id="category">
                     <option>--- Select Category ---</option>
 <?php           foreach($categories as $cat){
 ?>                  <option value="<?= $cat['id'] ?>"><?= $cat['category'] ?></option>
 <?php           }
 ?>              </select>
-                <input type="text" class="form-control col d-inline-block mx-1" name="price" placeholder="Price">
-                <input type="text" class="form-control col d-inline-block mx-1" name="stock" placeholder="Stocks">
+                <input type="text" class="form-control col d-inline-block mx-1" name="price" id="price" placeholder="Price">
+                <input type="text" class="form-control col d-inline-block mx-1" name="stock"  id="stock" placeholder="Stocks">
             </div>
 
             <div class="mb-3">

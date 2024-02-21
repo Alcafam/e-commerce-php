@@ -10,6 +10,7 @@
     <!-- CSS -->
     <link rel="stylesheet" type="text/css" href="<?=base_url('assets/css/my_style.css')?>">
     <link rel="stylesheet" type="text/css" href="<?=base_url('assets/css/side_navs.css')?>">
+    <link rel="stylesheet" type="text/css" href="<?=base_url('assets/css/fontawesome.css')?>">
     <!-- JQUERY DEPENDENCIES -->
     <script src="<?= base_url('assets/dependencies/jquery.js') ?>"></script>
     <script src="<?= base_url('assets/dependencies/bootstrap.js') ?>"></script>
@@ -18,7 +19,7 @@
 ?>          <script src="<?= base_url('assets/jquery/catalog.js') ?>"></script>
 <?php   }
         if(uri_string() == 'orders'){
-?>          <script src="<?= base_url('assets/jquery/orderq.js') ?>"></script>
+?>          <script src="<?= base_url('assets/jquery/orders.js') ?>"></script>
 <?php   }
         if(uri_string() == 'products'){
 ?>          <script src="<?= base_url('assets/jquery/products.js') ?>"></script>

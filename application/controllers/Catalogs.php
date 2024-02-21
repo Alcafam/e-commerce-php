@@ -47,9 +47,4 @@ class Catalogs extends CI_Controller {
         $this->load->view('dashboard/product_dashboard', $view_data);
     }
 
-    function get_filtered_orders($filter){
-        var_dump($filter);
-        die();
-    }
-
 }

@@ -1,6 +1,6 @@
 $( document ).ready(function() {
     var category;
-    $.post(base_url+'get_product_html', function(res) {
+    $.post(base_url+'get_product_table', function(res) {
         $('#product_cards').html(res);
     });
 
@@ -16,7 +16,7 @@ $( document ).ready(function() {
         let filter = $("#filter_form").serializeArray();
         console.log(filter);
         filter.push({name: 'category', value: category});
-        $.post(base_url+'get_product_html',filter, function(res){
+        $.post(base_url+'get_product_table',filter, function(res){
             console.log(res);
             $('#product_cards').html(res);
         })
@@ -24,6 +24,16 @@ $( document ).ready(function() {
     });
 
     $(document).on('click', '#add_product', function(){
-        $('#add_product_modal').modal('show');
+        $('#modal_title').text('ADD PRODUCT');
+        $('#add_update_product_modal').modal('show');
+    })
+
+    $(document).on('click', '.edit_product', function(){
+        $('#modal_title').text('UPDATE PRODUCT');
+        $('#add_update_product_modal').modal('show');
+    })
+
+    $('#add_update_product_modal').on('hide.bs.modal', function(){
+        $('#add_update_form').trigger("reset");
     })
 });

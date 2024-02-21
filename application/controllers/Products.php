@@ -19,7 +19,7 @@ class Products extends CI_Controller {
 		return $sess_like_data;
 	}
 
-    function load_view($title){
+    function load_view($title, $view_data){
         $view_data['title'] = $title;
         $this->load->view('layout/header', $view_data);
         $this->load->view('layout/navbar', $view_data);
@@ -30,37 +30,17 @@ class Products extends CI_Controller {
         $view_data['categories'] = $this->Product->get_all_categories();
         $view_data['total'] = count($this->Product->get_all_product());
 
-        $this->load_view("Product Dashboard - Emmeness");
+        $this->load_view("Product Dashboard - Emmeness", $view_data);
         $this->load->view('layout/side_nav');
         $this->load->view('layout/category_layout',$view_data);
-    }
-
-    function get_product_html(){
-        if($this->input->post()){
-            $filters = $this->input->post();
-            $view_data['products']=$this->Product->get_filtered_product($filters);
-            if(!empty($filters['search_filter'])){
-                $view_data['filter'] = $filters['category']." (".count($view_data['products']).")";
-            }else{
-                $view_data['filter'] = "Search Result (".count($view_data['products']).")";
-            }
-        }else{
-            $view_data['products']=$this->Product->get_all_product();
-            $view_data['filter'] = "All Products(".count($view_data['products']).")";
-        }
-        $this->load->view('dashboard/product_dashboard', $view_data);
     }
 
     function get_product_table(){
         if($this->input->post()){
             $filters = $this->input->post();
             $view_data['products']=$this->Product->get_filtered_product($filters);
-            if(!empty($filters['search_filter'])){
-                $view_data['filter'] = $filters['category']." (".count($view_data['products']).")";
-            }else{
-                $view_data['filter'] = "Search Result (".count($view_data['products']).")";
-            }
-        }else{
+            $view_data['filter'] = "Search Result (".count($view_data['products']).")";
+        }else if(!$this->input->post() && empty($this->input->post('search_filter'))){
             $view_data['products']=$this->Product->get_all_product();
             $view_data['filter'] = "All Products(".count($view_data['products']).")";
         }

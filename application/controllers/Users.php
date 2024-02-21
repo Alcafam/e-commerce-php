@@ -83,8 +83,7 @@ class Users extends CI_Controller {
 
     // DASHBOARD
     function dashboard(){
-		$view_data = $this->init();
-        if(!$view_data['user_id']){
+        if(!$this->session->userdata('user_id')){
             redirect(base_url('login'));
         }else{
             if($view_data['role']==1){
@@ -96,13 +95,6 @@ class Users extends CI_Controller {
 	}
 
     // INITIALIZERS
-    function init(){
-		$sess_like_data['name'] = $this->session->userdata('name');
-		$sess_like_data['user_id'] = $this->session->userdata('user_id');
-        $sess_like_data['role'] = $this->session->userdata('role');
-		return $sess_like_data;
-	}
-
     function init_sessions($user){
         $this->session->set_userdata(array(
             'user_id'=>$user[0]['id'], 
