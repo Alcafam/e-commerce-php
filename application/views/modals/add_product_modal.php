@@ -47,8 +47,8 @@
 
 <div class="modal" tabindex="-1" id="message_modal">
     <div class="modal-dialog">
-        <div class="modal-content bg-succes text-center text-white">
-            <div class="modal-body bg-white" id="message_modal_body">
+        <div class="modal-content text-center">
+            <div class="modal-body bg-success" id="message_modal_body">
                 
             </div>
         </div>

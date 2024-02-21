@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1:3306
--- Generation Time: Feb 21, 2024 at 02:29 PM
+-- Generation Time: Feb 21, 2024 at 02:36 PM
 -- Server version: 8.0.31
 -- PHP Version: 7.4.33
 
@@ -129,7 +129,7 @@ CREATE TABLE IF NOT EXISTS `products` (
   `updated_at` datetime DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `fk_products_categories1_idx` (`category_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=17 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=20 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 --
 -- Dumping data for table `products`
@@ -138,11 +138,13 @@ CREATE TABLE IF NOT EXISTS `products` (
 INSERT INTO `products` (`id`, `category_id`, `product_name`, `description`, `price`, `images`, `stock`, `created_at`, `updated_at`) VALUES
 (1, 1, 'Purple Elegant Gown', 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.', '1599.00', '{\"extras\": [], \"main_pic\": \"1.png\"}', '5', '2024-02-17 01:48:42', '2024-02-17 01:48:42'),
 (2, 1, 'Dark Blue Elegant Gown', 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.', '1499.00', '{\"extras\": [], \"main_pic\": \"2.png\"}', '2', '2024-02-17 01:48:42', '2024-02-17 01:48:42'),
-(3, 1, 'Casual White Dress', 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.', '456.00', '{\"extras\": [], \"main_pic\": \"7.png\"}', '34', '2024-02-17 01:48:42', '2024-02-17 01:48:42'),
 (4, 4, 'Winter Jacket', 'Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo.', '1239.00', '{\"extras\": [\"13.png\", \"14.png\"], \"main_pic\": \"12.png\"}', '102', '2024-02-17 01:48:42', '2024-02-17 01:48:42'),
 (5, 4, 'Denim Jacket', 'Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo.', '1599.00', '{\"extras\": [], \"main_pic\": \"17.png\"}', '145', '2024-02-17 01:48:42', '2024-02-17 01:48:42'),
 (6, 5, 'White Long Sleeve Blouse', 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.', '469.00', '{\"extras\": [], \"main_pic\": \"25.png\"}', '46', '2024-02-17 01:48:42', '2024-02-17 01:48:42'),
-(16, 1, 'Light Casual Dress', 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam hendrerit nisi sed sollicitudin pellentesque. Nunc posuere purus rhoncus pulvinar aliquam. Ut aliquet tristique nisl vitae volutpat. Nulla aliquet porttitor venenatis. Donec a dui et dui fringilla consectetur id nec massa. Aliquam erat volutpat. Sed ut dui ut lacus dictum fermentum vel tincidunt neque. Sed sed lacinia lectus. Duis sit amet sodales felis. Duis nunc eros, mattis at dui ac, convallis semper risus. In adipiscing ultrices tellus, in suscipit massa vehicula eu.', '467.00', '{\"main_pic\": \"7.png\", \"extras\": [\"10.png\", \"11.png\"]}', '123', '2024-02-21 19:56:09', '2024-02-21 19:56:09');
+(16, 1, 'Light Casual Dress', 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam hendrerit nisi sed sollicitudin pellentesque. Nunc posuere purus rhoncus pulvinar aliquam. Ut aliquet tristique nisl vitae volutpat. Nulla aliquet porttitor venenatis. Donec a dui et dui fringilla consectetur id nec massa. Aliquam erat volutpat. Sed ut dui ut lacus dictum fermentum vel tincidunt neque. Sed sed lacinia lectus. Duis sit amet sodales felis. Duis nunc eros, mattis at dui ac, convallis semper risus. In adipiscing ultrices tellus, in suscipit massa vehicula eu.', '467.00', '{\"main_pic\": \"7.png\", \"extras\": [\"10.png\", \"11.png\"]}', '123', '2024-02-21 19:56:09', '2024-02-21 19:56:09'),
+(17, 2, 'Denim Pant', 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.', '599.00', '{\"main_pic\": \"21.png\", \"extras\": []}', '87', '2024-02-21 22:32:41', '2024-02-21 22:32:41'),
+(18, 1, 'Dark Casual Dress', 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Massa id neque aliquam vestibulum morbi blandit cursus risus. Rutrum quisque non tellus orci. Tempus egestas sed sed risus pretium quam vulputate dignissim. Morbi tristique senectus et netus et malesuada fames ac turpis. Semper risus in hendrerit gravida. Molestie at elementum eu facilisis sed. Justo nec ultrices dui sapien. Purus sit amet volutpat consequat mauris nunc congue nisi vitae. Platea dictumst vestibulum rhoncus est pellentesque elit ullamcorper. Nec sagittis aliquam malesuada bibendum arcu vitae elementum.', '467.00', '{\"main_pic\": \"8.png\", \"extras\": [\"21.png\", \"6.png\", \"9.png\"]}', '232', '2024-02-21 22:34:45', '2024-02-21 22:34:45'),
+(19, 3, 'Casual Polo', 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Massa id neque aliquam vestibulum morbi blandit cursus risus. Rutrum quisque non tellus orci. Tempus egestas sed sed risus pretium quam vulputate dignissim. Morbi tristique senectus et netus et malesuada fames ac turpis. Semper risus in hendrerit gravida. Molestie at elementum eu facilisis sed. Justo nec ultrices dui sapien. Purus sit amet volutpat consequat mauris nunc congue nisi vitae. Platea dictumst vestibulum rhoncus est pellentesque elit ullamcorper. Nec sagittis aliquam malesuada bibendum arcu vitae elementum.', '355.00', '{\"main_pic\": \"24.png\", \"extras\": [\"23.png\"]}', '56', '2024-02-21 22:35:49', '2024-02-21 22:35:49');
 
 -- --------------------------------------------------------
 
