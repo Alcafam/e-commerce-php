@@ -22,8 +22,38 @@ class Product extends CI_Model
         )->result_array();
     }
 
-    function get_all_product(){ 
-        $results = $this->db->query(
+    function get_product_count(){
+        $total = $this->db->query("SELECT COUNT(*) AS total FROM products")->result_array();
+            $last_rows=array();
+            for($i=0; $i<=$total[0]['total']; $i+=5){
+                if($i == ($total[0]['total'])){
+                    break;
+                }else{
+                    array_push($last_rows, $i);
+                }
+            }
+            $data = $last_rows;
+            return $data;
+    }
+
+    function get_total_product(){
+        return count($this->db->query("SELECT * FROM products")->result_array());
+    }
+
+    function get_pages($count){
+        $pages=array();
+            for($i=0; $i<=$count; $i+=5){
+                if($i >= ($count)){
+                    break;
+                }else{
+                    array_push($pages, $i);
+                }
+            }
+        return $pages;
+    }
+
+    function get_all_product($last_row){ 
+        $query =
             "SELECT p.*, c.category, 
                 sum(CASE 
                     WHEN o.status_id != 5 
@@ -37,17 +67,28 @@ class Product extends CI_Model
                     ON od.product_id = p.id
                 LEFT JOIN orders o
                     ON o.id = od.order_id
-            GROUP BY p.id"
-        )->result_array();
+            GROUP BY p.id LIMIT {$last_row}, 5";
+            
+        $results = $this->db->query($query)->result_array();
         $results = $this->decode_images($results);
         return $results;
     }
 
     function get_filtered_product($filters){
-        $query=
-            "SELECT p.*, c.category FROM products p
+        $query =
+            "SELECT p.*, c.category, 
+            sum(CASE 
+                WHEN o.status_id != 5 
+                THEN od.quantity 
+                ELSE 0 
+            END) as sold
+            FROM products p
             LEFT JOIN categories c
                 ON c.id = p.category_id
+            LEFT JOIN order_details od
+                ON od.product_id = p.id
+            LEFT JOIN orders o
+                ON o.id = od.order_id
             WHERE 
                 (p.product_name LIKE '%{$this->security->xss_clean($filters['search_filter'])}%'
                 OR p.description LIKE '%{$this->security->xss_clean($filters['search_filter'])}%'
@@ -56,81 +97,62 @@ class Product extends CI_Model
         if(!empty($filters['category'])){
             $query .= " AND c.category = '{$this->security->xss_clean($filters['category'])}'";
         }
+        $query .= "GROUP BY p.id LIMIT {$filters['last_row']}, 5";
+
         $results = $this->db->query($query)->result_array();
         $results = $this->decode_images($results);
         return $results;
     }
 // ============= END OF GETTERS ============= //
 
-// ============= ORDER-RELATED SQL ============= // 
-    function orders_select_query(){
-        return "SELECT p.id, p. price, p.images->>'$.main_pic' AS 'image', c.category, od.quantity, CONCAT(u.first_name,' ',u.last_name) AS 'name', DATE_FORMAT(o.updated_at,'%m/%d/%Y') AS 'order_date', o.status_id,
-        CONCAT_WS(
-            IF(LENGTH(JSON_VALUE(o.shipping_address,'$.house')),CONCAT(JSON_VALUE(o.shipping_address,'$.house'), ', '),''),
-            IF(LENGTH(JSON_VALUE(o.shipping_address,'$.street')),CONCAT(JSON_VALUE(o.shipping_address,'$.street'), ', '),''),
-            IF(LENGTH(JSON_VALUE(o.shipping_address,'$.city')),CONCAT(JSON_VALUE(o.shipping_address,'$.city'), ', '),''),
-            IF(LENGTH(JSON_VALUE(o.shipping_address,'$.barangay')),CONCAT(JSON_VALUE(o.shipping_address,'$.barangay'), ', '),''),
-            IF(LENGTH(JSON_VALUE(o.shipping_address,'$.province')),CONCAT(JSON_VALUE(o.shipping_address,'$.province'), ', '),''),
-            IF(LENGTH(JSON_VALUE(o.shipping_address,'$.zipcode')),JSON_VALUE(o.shipping_address,'$.zipcode'),'')
-        ) AS 'address'";
-    }
-    function get_orders(){
-        $results = $this->db->query($this->orders_select_query(). 
-            " FROM products AS p 
-                LEFT JOIN categories c
-                    ON c.id = p.category_id
-                LEFT JOIN order_details od
-                    ON od.product_id = p.id
-                LEFT JOIN orders o
-                    ON o.id = od.order_id
-                LEFT JOIN users u
-                    ON u.id = o.user_id
-            WHERE o.status_id != 5"
-        )->result_array();
-        return $results;
+// =========== VALIDATIONS =========== //
+function validate_product($data){
+    $errors ='';
+    $this->load->library('form_validation');
+    $this->form_validation->set_error_delimiters('<div class="alert alert-danger" role="alert">','</div>');
+    $this->form_validation->set_rules('name', 'Name', 'required');
+    $this->form_validation->set_rules('description', 'Description', 'required');
+    $this->form_validation->set_rules('price', 'Price', 'required|is_numeric');
+    $this->form_validation->set_rules('stock', 'Stock', 'required|is_numeric');
+    $this->form_validation->set_rules('category', 'Category', 'required');
+    $this->form_validation->set_rules('main', 'Main Image', 'required');
+    
+    if(isset($_FILES['images']) && ($data['main'] == 'undefined' || $data['main'] =='')){
+        $errors .= '<div class="alert alert-danger" role="alert">Pick a Main Image!</div>';
+    } 
+
+    if(!isset($_FILES['images'])){
+        $errors .= '<div class="alert alert-danger" role="alert">Select an Image!!</div>';
     }
 
-    function get_filtered_orders($filters){
-        $query = $this->orders_select_query(). 
-            ", s.status
-                FROM products AS p 
-                LEFT JOIN categories c
-                    ON c.id = p.category_id
-                LEFT JOIN order_details od
-                    ON od.product_id = p.id
-                LEFT JOIN orders o
-                    ON o.id = od.order_id
-                LEFT JOIN users u
-                    ON u.id = o.user_id
-            LEFT JOIN statuses s
-            ON s.id = o.status_id
-            WHERE o.status_id != 5
-                AND (p.product_name LIKE '%{$this->security->xss_clean($filters['search_filter'])}%'
-                    OR p.id LIKE '%{$this->security->xss_clean($filters['search_filter'])}%'
-                    OR s.status LIKE '%{$this->security->xss_clean($filters['search_filter'])}%'
-                )
-            ";
-        if(!empty($filters['status'])){
-            $query .= " AND s.status = '{$this->security->xss_clean($filters['status'])}'";
-        }
-
-        $results = $this->db->query($query)->result_array();
-        return $results;
+    if(!$this->form_validation->run() || !empty($errors)) {
+        $errors .= validation_errors();
+        return $errors;
+    }else{
+        return 'success';
     }
+}
 
-    function get_order_count(){
-        $results = $this->db->query(
-            "SELECT s.*, count(o.status_id) as 'status_count'
-            FROM statuses s
-                LEFT JOIN orders o 
-                    ON o.status_id = s.id
-            WHERE s.id !=5
-            GROUP BY s.id"
-        )->result_array();
-        $results = array_filter($results);
-        return $results;
-    }
-// =========== END OF ORDER-RELATED SQL =========== //
+// =========== END OF VALIDATIONS =========== //
+
+// =========== CRUDS =========== //
+function add_product($data){
+    $query = "INSERT INTO products(category_id, product_name, description, price, images, stock, created_at, updated_at) VALUES (?,?,?,?,?,?,NOW(),NOW())";
+
+    $data['image'] = $this->json_stringify($_FILES['images']['name'], $data['main']);
+
+    $values = array(
+        $this->security->xss_clean($data['category']),
+        $this->security->xss_clean($data['name']),
+        $this->security->xss_clean($data['description']),
+        $this->security->xss_clean($data['price']),
+        $this->security->xss_clean($data['image']),
+        $this->security->xss_clean($data['stock']),
+    );
+    $this->db->query($query, $values);
+    return $this->db->insert_id();
+}
+// =========== END OF CRUDS =========== //
 
 // =========== JSON_DECODE =========== //
 function decode_images($images){
@@ -138,6 +160,24 @@ function decode_images($images){
         $images[$x]['images'] = json_decode($images[$x]['images']);
     }
     return $images;
+}
+
+function json_stringify($jsons,$main){
+    $string = '{"main_pic": "'.$jsons[$main].'", "extras": [';
+    unset($jsons[$main]);
+    $jsons = array_values($jsons);
+    if(!empty($jsons)){
+        foreach($jsons as $key=>$value){
+            if($key == count($jsons)-1 ){
+                $string .= '"'.$value.'"]}';
+            }else{
+                $string .= '"'.$value.'", ';
+            }
+        }
+    }else{
+        $string .= "]}";
+    }
+    return $string;
 }
 // =========== END OF JSON_DECODE =========== //
 }

@@ -19,7 +19,7 @@
 ?>          <script src="<?= base_url('assets/jquery/catalog.js') ?>"></script>
 <?php   }
         if(uri_string() == 'orders'){
-?>          <script src="<?= base_url('assets/jquery/orders.js') ?>"></script>
+?>          <script src="<?= base_url('assets/jquery/order.js') ?>"></script>
 <?php   }
         if(uri_string() == 'products'){
 ?>          <script src="<?= base_url('assets/jquery/products.js') ?>"></script>

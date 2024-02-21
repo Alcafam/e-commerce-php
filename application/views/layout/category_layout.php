@@ -7,58 +7,7 @@
 <?php   }
 ?>
 </div>
-<div class="row mt-5">
-    <div class="col-2">
-        <a href="javascript:void(0)" class="category_button text-white text-decoration-none position-relative py-3 my-1 rounded-2 text-center w-50">
-            <span class="absolute-cat-num"><?=$total ?></span>
-            <span>All Products</span>
-        </a>
-<?php   foreach($categories as $cat){
-?>      <a href="javascript:void(0)" class="category_button text-white text-decoration-none position-relative py-3 my-1 rounded-2 text-center w-50" data-id="<?= $cat['category'] ?>">
-            <span class="absolute-cat-num"><?=$cat['prod_count'] ?></span>
-            <span><?= $cat['category'] ?></span>
-        </a>
-<?php   }
-?>
-    </div>
-    <div class="col-10" id="product_cards">
-    </div>
+<div class="row mt-5" id="product_cards">
+    
 </div>
 
-<div class="modal" tabindex="-1" id="add_update_product_modal">
-    <div class="modal-dialog modal-lg">
-        <div class="modal-content bg-white">
-            <div class="modal-header">
-                <h5 class="modal-title" id="modal_title"></h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-        <div class="modal-body bg-white">
-            <form id="add_update_form">
-            <div class="mb-3">
-                <input type="text" class="form-control" name="product" id="product" placeholder="Name">
-            </div>
-
-            <div class="mb-3">
-                <textarea class="form-control" name="description" id="description"></textarea>
-            </div>
-
-            <div class="mb-3 row mx-1">
-                <select class="form-control col d-inline-block mx-1" name="category" id="category">
-                    <option>--- Select Category ---</option>
-<?php           foreach($categories as $cat){
-?>                  <option value="<?= $cat['id'] ?>"><?= $cat['category'] ?></option>
-<?php           }
-?>              </select>
-                <input type="text" class="form-control col d-inline-block mx-1" name="price" id="price" placeholder="Price">
-                <input type="text" class="form-control col d-inline-block mx-1" name="stock"  id="stock" placeholder="Stocks">
-            </div>
-
-            <div class="mb-3">
-                <label for="product" class="form-label">Email address</label>
-                <input type="text" class="form-control" id="product" name="product">
-            </div>
-            </form>
-        </div>
-        </div>
-    </div>
-</div>

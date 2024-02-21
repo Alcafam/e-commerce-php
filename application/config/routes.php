@@ -22,5 +22,8 @@ $route['get_product_table'] = 'products/get_product_table';
 $route['catalog'] = 'catalogs';
 $route['get_catalog_html'] = 'catalogs/get_catalog_html';
 
+// CRUD
+$route['add_product'] = 'products/add_product';
+
 $route['404_override'] = '';
 $route['translate_uri_dashes'] = FALSE;

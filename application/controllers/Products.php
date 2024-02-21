@@ -7,9 +7,7 @@ class Products extends CI_Controller {
 		parent::__construct();
 		$this->load->model('User');
         $this->load->model('Product');
-        ini_set('display_errors', 1);
-        ini_set('display_startup_errors', 1);
-        error_reporting(E_ALL);
+        define ('SITE_ROOT', realpath(dirname(__FILE__)));
  	}
 
     function init(){
@@ -28,22 +26,79 @@ class Products extends CI_Controller {
     function index(){
         $view_data = $this->init();
         $view_data['categories'] = $this->Product->get_all_categories();
-        $view_data['total'] = count($this->Product->get_all_product());
 
         $this->load_view("Product Dashboard - Emmeness", $view_data);
         $this->load->view('layout/side_nav');
         $this->load->view('layout/category_layout',$view_data);
+        $this->load->view('modals/add_product_modal');
     }
 
     function get_product_table(){
-        if($this->input->post()){
+        $view_data['categories'] = $this->Product->get_all_categories();
+        $view_data['total'] = $this->Product->get_total_product();
+        if($this->input->post('category')){
+            $view_data['active'] = $this->input->post('category');
+        }else{
+            $view_data['active'] = '';
+        }
+        
+        if($this->input->post('search_filter') || $this->input->post('category')){ 
             $filters = $this->input->post();
+            if(empty($filters['last_row'])){
+                $filters['last_row']=0;
+            }
             $view_data['products']=$this->Product->get_filtered_product($filters);
+            $view_data['pages'] = $this->Product->get_pages(count($view_data['products']));
             $view_data['filter'] = "Search Result (".count($view_data['products']).")";
-        }else if(!$this->input->post() && empty($this->input->post('search_filter'))){
-            $view_data['products']=$this->Product->get_all_product();
+        }else if(!$this->input->post('last_row') && empty($this->input->post('search_filter')) && ($this->input->post('category') || !$this->input->post('category'))){
+            $view_data['pages'] = $this->Product->get_product_count();
+            $view_data['products']=$this->Product->get_all_product(0);
+            $view_data['filter'] = "All Products(".count($view_data['products']).")";
+        }else{
+            $view_data['pages'] = $this->Product->get_product_count();
+            $view_data['products']=$this->Product->get_all_product($this->input->post('last_row'));
             $view_data['filter'] = "All Products(".count($view_data['products']).")";
         }
         $this->load->view('dashboard/product_table', $view_data);
     }
+
+    function add_product(){
+        $data = $this->input->post();
+        $validation = $this->Product->validate_product($data);
+        if($validation!=="success"){
+            echo json_encode($validation);
+        }else{
+            /* FILE UPLOAD */
+            $inserted_id = $this->Product->add_product($data);
+            $files = $_FILES;
+            for($i = 0; $i < count($files['images']['name']); $i++){ 
+                
+                $_FILES['images']['name'] = $files['images']['name'][$i]; 
+                $_FILES['images']['type'] = $files['images']['type'][$i]; 
+                $_FILES['images']['tmp_name'] = $files['images']['tmp_name'][$i]; 
+                $_FILES['images']['error'] = $files['images']['error'][$i]; 
+                $_FILES['images']['size'] = $files['images']['size'][$i];
+
+                $path= 'assets/images/products/'.$inserted_id.'/';
+                $config['upload_path'] = $path;  
+                $config['allowed_types'] = 'gif|jpg|png';
+                $config['overwrite'] = TRUE;
+                $config['remove_spaces'] = FALSE;
+
+                if(!is_dir($path)){
+                    mkdir($path,0655,true);
+                }
+
+                $this->load->library('upload', $config); 
+                $this->upload->initialize($config); 
+
+                if(!$this->upload->do_upload('images')){ 
+                    $error = array('error' => $this->upload->display_errors());
+                    var_dump($error);  
+                } 
+            }
+            echo json_encode("success");
+        }
+    }
 }
+
