@@ -24,6 +24,10 @@ $route['get_catalog_html'] = 'catalogs/get_catalog_html';
 
 // CRUD
 $route['add_product'] = 'products/add_product';
+$route['update_status'] = 'orders/update_status';
+$route['get_product_details/(:any)'] = 'products/get_product_details/$1';
+$route['delete_image'] = 'products/delete_image';
+$route['update_product'] = 'products/update_product';
 
 $route['404_override'] = '';
 $route['translate_uri_dashes'] = FALSE;

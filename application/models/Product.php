@@ -103,6 +103,21 @@ class Product extends CI_Model
         $results = $this->decode_images($results);
         return $results;
     }
+
+    function get_product_by_id($id){
+        $results = $this->db->query("SELECT *, JSON_VALUE(images,'$.main_pic') AS main_pic, JSON_VALUE(images,'$.extras') AS extras FROM products WHERE id =  {$this->security->xss_clean($id)}")->result_array()[0];
+        $results['extras'] = json_decode($results['extras']);
+        $results['images'] = array();
+        $results['images'][0]['path'] = base_url().'assets/images/products/'.$id.'/'.$results['main_pic'];
+        $results['images'][0]['id'] = $id;
+        $results['images'][0]['name'] = $results['main_pic'];
+        foreach($results['extras'] as $key=>$extra){
+            $results['images'][$key+1]['path'] = base_url().'assets/images/products/'.$id.'/'.$extra;
+            $results['images'][$key+1]['id'] = $id;
+            $results['images'][$key+1]['name'] = $extra;
+        }
+        return $results;
+    }
 // ============= END OF GETTERS ============= //
 
 // =========== VALIDATIONS =========== //
@@ -121,7 +136,7 @@ function validate_product($data){
         $errors .= '<div class="alert alert-danger" role="alert">Pick a Main Image!</div>';
     } 
 
-    if(!isset($_FILES['images'])){
+    if(!isset($_FILES['images']) && !isset($data['product_id'])){
         $errors .= '<div class="alert alert-danger" role="alert">Select an Image!!</div>';
     }
 
@@ -151,6 +166,15 @@ function add_product($data){
     );
     $this->db->query($query, $values);
     return $this->db->insert_id();
+}
+
+function delete_image($data){
+    if($data['index'] == 0){
+        return $this->db->query("UPDATE products set images = JSON_REPLACE(images,'$.main_pic','') WHERE id={$this->security->xss_clean($data['product_id'])}");
+    }else{
+        return $this->db->query("UPDATE products set images = JSON_REMOVE(images,'$.extras[{$this->security->xss_clean($data['json_index'])}]') WHERE id={$this->security->xss_clean($data['product_id'])}");
+    }
+    
 }
 // =========== END OF CRUDS =========== //
 

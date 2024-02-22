@@ -9,15 +9,15 @@
             <div id="modal_messages"></div>
             <form id="add_update_form">
             <div class="mb-3">
-                <input type="text" class="form-control" name="product" id="product" placeholder="Name">
+                <input type="text" class="form-control" name="product" id="modal_product" placeholder="Name">
             </div>
 
             <div class="mb-3">
-                <textarea class="form-control" name="description" id="description"></textarea>
+                <textarea class="form-control" name="description" id="modal_description"></textarea>
             </div>
 
             <div class="mb-3 row mx-1">
-                <select class="form-control col d-inline-block mx-1" name="category" id="category">
+                <select class="form-control col d-inline-block mx-1" name="category" id="modal_category">
                     <option value="">--- Select Category ---</option>
 <?php           foreach($categories as $cat){
 ?>                  <option value="<?= $cat['id'] ?>"><?= $cat['category'] ?></option>
@@ -26,13 +26,14 @@
                         <button>-- Add Category--</button>
                     </option>
                 </select>
-                <input type="text" class="form-control col d-inline-block mx-1" name="price" id="price" placeholder="Price">
-                <input type="text" class="form-control col d-inline-block mx-1" name="stock"  id="stock" placeholder="Stocks">
+                <input type="text" class="form-control col d-inline-block mx-1" name="price" id="modal_price" placeholder="Price">
+                <input type="text" class="form-control col d-inline-block mx-1" name="stock"  id="modal_stock" placeholder="Stocks">
             </div>
 
             <div class="mb-3">
                 <label for="product" class="form-label">Images</label>
-                <input type="file" id="image" name="image[]" multiple/>
+                <input type="file" id="modal_image" name="image[]" multiple/>
+                <div id="update_frames" class="mb-1 row"></div>
                 <div id="frames" class="mt-2 row"></div>
             </div>
             <div class="text-end">
@@ -49,7 +50,7 @@
     <div class="modal-dialog">
         <div class="modal-content text-center">
             <div class="modal-body bg-success" id="message_modal_body">
-                
+                <button type="button" class="btn btn-warning d-block" data-bs-dismiss="modal" aria-label="Close">Ok</button>
             </div>
         </div>
     </div>

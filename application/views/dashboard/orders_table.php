@@ -32,7 +32,7 @@
                     <img height="100px" src="<?= base_url('assets/images/products/'.$prod['id'].'/'.$prod['image']) ?>">
                     <span><?= $prod['quantity'] ?> items</span>
                 </th>
-                <td><?= $prod['id'] ?></td>
+                <td><?= $prod['order_id'] ?></td>
                 <td><?= $prod['order_date'] ?></td>
                 <td>
                     <span class="d-block fw-bold"><?= $prod['name'] ?></span>
@@ -40,7 +40,7 @@
                 </td>
                 <td>&#8369; <?= number_format($prod['price'] * $prod['quantity'], 2) ?></td>
                 <td>
-                    <select>
+                    <select class="edit_status" data-id="<?= $prod['order_id'] ?>">
 <?php               foreach($statuses as $stat){
 ?>                      <option value="<?= $stat['id'] ?>" <?= ($prod['status_id'] == $stat['id'])? 'selected' : '' ?>><?= $stat['status'] ?></option>
 <?php               }

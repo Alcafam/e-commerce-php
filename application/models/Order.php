@@ -53,7 +53,7 @@ class Order extends CI_Model
 
 // ============= ORDER-RELATED SQL ============= // 
     function orders_select_query(){
-        return "SELECT p.id, p. price, p.images->>'$.main_pic' AS 'image', c.category, od.quantity, CONCAT(u.first_name,' ',u.last_name) AS 'name', DATE_FORMAT(o.updated_at,'%m/%d/%Y') AS 'order_date', o.status_id,
+        return "SELECT p.id, p. price, p.images->>'$.main_pic' AS 'image', c.category, od.quantity, CONCAT(u.first_name,' ',u.last_name) AS 'name', DATE_FORMAT(o.updated_at,'%m/%d/%Y') AS 'order_date', o.status_id, o.id as 'order_id',
         CONCAT_WS(
             IF(LENGTH(JSON_VALUE(o.shipping_address,'$.house')),CONCAT(JSON_VALUE(o.shipping_address,'$.house'), ', '),''),
             IF(LENGTH(JSON_VALUE(o.shipping_address,'$.street')),CONCAT(JSON_VALUE(o.shipping_address,'$.street'), ', '),''),
@@ -120,5 +120,16 @@ class Order extends CI_Model
         return $results;
     }
 // =========== END OF ORDER-RELATED SQL =========== //
+
+// =========== CRUD-RELATED SQL =========== //
+    function update_status($data){
+        return $this->db->query(
+            "UPDATE orders SET status_id=?, updated_at=NOW() WHERE id=?", 
+            array($this->security->xss_clean($data['status_id']),
+                $this->security->xss_clean($data['order_id'])
+            )
+        );
+    }
+// =========== END OF CRUD-RELATED SQL =========== //
 }
 ?>

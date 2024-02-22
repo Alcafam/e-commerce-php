@@ -100,5 +100,59 @@ class Products extends CI_Controller {
             echo json_encode("success");
         }
     }
+
+    function get_product_details($id){
+        $product = $this->Product->get_product_by_id($id);
+        echo json_encode($product);
+    }
+
+    function delete_image(){
+        $data = $this->input->post();
+        $success = $this->Product->delete_image($data);
+        if($success == true){
+            unlink(FCPATH.'assets\images\products/'.$data['product_id'].'/'.$data['name']);
+        }
+    }
+
+    function update_product(){
+        $data = $this->input->post();
+        $validation = $this->Product->validate_product($data);
+        if($validation!=="success"){
+            echo json_encode($validation);
+        }else{
+            echo json_encode("emmmeee");
+            /* FILE UPLOAD */
+            // $inserted_id = $this->Product->add_product($data);
+            // $files = $_FILES;
+            // for($i = 0; $i < count($files['images']['name']); $i++){ 
+                
+            //     $_FILES['images']['name'] = $files['images']['name'][$i]; 
+            //     $_FILES['images']['type'] = $files['images']['type'][$i]; 
+            //     $_FILES['images']['tmp_name'] = $files['images']['tmp_name'][$i]; 
+            //     $_FILES['images']['error'] = $files['images']['error'][$i]; 
+            //     $_FILES['images']['size'] = $files['images']['size'][$i];
+
+            //     $path= 'assets/images/products/'.$inserted_id.'/';
+            //     $config['upload_path'] = $path;  
+            //     $config['allowed_types'] = 'gif|jpg|png';
+            //     $config['overwrite'] = TRUE;
+            //     $config['remove_spaces'] = FALSE;
+
+            //     if(!is_dir($path)){
+            //         mkdir($path,0655,true);
+            //     }
+
+            //     $this->load->library('upload', $config); 
+            //     $this->upload->initialize($config); 
+
+            //     if(!$this->upload->do_upload('images')){ 
+            //         $error = array('error' => $this->upload->display_errors());
+            //         var_dump($error);  
+            //     } 
+            // }
+            // echo json_encode("success");
+        }
+        // var_dump($validation);
+    }
 }
 

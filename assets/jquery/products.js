@@ -26,10 +26,11 @@ $( document ).ready(function() {
 
     $(document).on('submit', '#filter_form', function(){
         let filter = $("#filter_form").serializeArray();
-        console.log(filter);
         filter.push({name: 'category', value: category});
         filter.push({name: 'last_row', value: last_row});
+
         $.post(base_url+'get_product_table',filter, function(res){
+            console.log('emme')
             $('#product_cards').html(res);
         })
         return false;
@@ -43,14 +44,24 @@ $( document ).ready(function() {
     })
 
     $(document).on('click', '.edit_product', function(){
+        let id = $(this).attr('data-id');
         $('#modal_title').text('UPDATE PRODUCT');
         $('#submit_modal_btn').attr('value', "UPDATE");
-        $('#submit_modal_btn').attr('data-id', $(this).attr('data-id'));
+        $('#add_update_form').prepend('<input id="form_product_id" name="product_id" value="'+$(this).attr('data-id')+'" hidden>')
+        $.get(base_url+'get_product_details/'+id, function(res){
+            $('#product_cards').html(res);
+            $('#modal_product').val(res.product_name);
+            $('#modal_description').val(res.description);
+            $("#modal_category option[value="+res.category_id+"]").attr('selected','selected');
+            $('#modal_price').val(res.price);
+            $('#modal_stock').val(res.stock);
+            set_update_frames(res.images)
+        },'json')
         $('#add_update_product_modal').modal('show');
     })
 
-    // IMAGE PREVIEW
-    $(document).on('change', '#image', function(){
+    // ADD IMAGE PREVIEW
+    $(document).on('change', '#modal_image', function(){
         $("#frames").html('');
         for (var i = 0; i < $(this)[0].files.length; i++) {
             files.push($(this)[0].files[i]);
@@ -70,6 +81,46 @@ $( document ).ready(function() {
         files.splice(index, 1);
         $(this).parent().remove();
     })
+    $(document).on('click', '.remove_saved_image', function(){
+        let index = $(this).attr('data-id');
+        let data = {
+            "name": $(this).attr('data'),
+            "product_id": $(this).attr('id'),
+            "index" : index,
+            "json_index": parseInt(index)-1
+        }
+        let button = $(this);
+        $.post(base_url+'delete_image', data, function(res){
+            button.parent().remove();
+            $('.saved_images').each(function(key, value) {
+                $(this).children('.remove_saved_image').attr('data-id', key);
+            })
+        })
+    })
+
+    // UPDATE IMAGE PREVIEW
+    function set_update_frames(paths){
+        $.each(paths, function(key, value) {
+            $("#update_frames").append(
+                '<div class="d-inline-block position-relative me-3 border border-1 border-dark saved_images" style="width:150px; height:150px">' +
+                    '<a href="javascript:void(0)" class="absolute-cat-num remove_saved_image btn btn-danger" id="'+value.id+'" data="'+value.name+'" data-id="'+key+'">x</a>'+
+                        '<img src="'+value.path+'"  class="img-fluid"/>' +
+                    '<div class="position-absolute sticky-bottom main_div_'+key+'">'+
+                    '</div>'+
+                '</div>'
+            );
+            if(key == 0){
+                $(".main_div_"+key).append(
+                    '<input type="checkbox" class="main_pic" name="main_pic" value="'+key+'" checked >Mark as main'
+                );
+            }else{
+                $(".main_div_"+key).append(
+                    '<input type="checkbox" class="main_pic" name="main_pic" value="'+key+'" >Mark as main'
+                );
+            }
+        });
+    }
+    
 
 // AJAX
     $(document).on('submit', '#add_update_form', function(){
@@ -78,17 +129,18 @@ $( document ).ready(function() {
         for (var index = 0; index < files.length; index++) {
             form_data.append("images[]", files[index]);
         }
-        form_data.append('name', $('#product').val());
-        form_data.append('description', $('#description').val());
-        form_data.append('price', $('#price').val());
-        form_data.append('stock', $('#stock').val());
-        form_data.append('category', $('#category').val());
+        form_data.append('name', $('#modal_product').val());
+        form_data.append('description', $('#modal_description').val());
+        form_data.append('price', $('#modal_price').val());
+        form_data.append('stock', $('#modal_stock').val());
+        form_data.append('category', $('#modal_category').val());
         form_data.append('main', $('.main_pic:checked').val());  
 
         if($('#submit_modal_btn').val() == "ADD"){
             url = "add_product"
         }else{
-            url = "update_product/"+$(this).attr('data-id');
+            url = "update_product";
+            form_data.append('product_id', $('#form_product_id').val());
         }
 
         $.ajax({
@@ -121,8 +173,10 @@ $( document ).ready(function() {
 
     $('#add_update_product_modal').on('hide.bs.modal', function(){
         $('#add_update_form').trigger("reset");
+        $('#update_frames').empty();
         $('#frames').empty();
         $('#modal_messages').empty();
+        // $('#filter_form').submit();
     })
 
     $(document).on('change', '.main_pic', function(){

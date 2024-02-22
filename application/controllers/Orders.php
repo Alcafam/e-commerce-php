@@ -36,6 +36,7 @@ class Orders extends CI_Controller {
                 $this->load_view("Order Dashboard - Emmeness",$view_data);
                 $this->load->view('layout/side_nav');
                 $this->load->view('layout/status_layout',$view_data);
+                $this->load->view('modals/are_you_sure_modal');
             }
         }
 	}
@@ -69,6 +70,11 @@ class Orders extends CI_Controller {
         }
         
         $this->load->view('dashboard/orders_table', $view_data);
+    }
+
+    function update_status(){
+        $data = $this->input->post();
+        $this->Order->update_status($data);
     }
 
 }
