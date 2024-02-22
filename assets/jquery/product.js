@@ -91,10 +91,14 @@ $( document ).ready(function() {
         }
         let button = $(this);
         $.post(base_url+'delete_image', data, function(res){
-            button.parent().remove();
-            $('.saved_images').each(function(key, value) {
-                $(this).children('.remove_saved_image').attr('data-id', key);
-            })
+            if(res){
+                $('#modal_messages').html(res);
+            }else{
+                button.parent().remove();
+                $('.saved_images').each(function(key, value) {
+                    $(this).children('.remove_saved_image').attr('data-id', key);
+                })
+            }
         })
     })
 
@@ -111,7 +115,7 @@ $( document ).ready(function() {
             );
             if(key == 0){
                 $(".main_div_"+key).append(
-                    '<input type="checkbox" class="main_pic" name="main_pic" value="'+key+'" checked >Mark as main'
+                    '<input type="checkbox" class="main_pic" name="main_pic" value="'+key+'" checked data-id="old_main">Mark as main'
                 );
             }else{
                 $(".main_div_"+key).append(
@@ -126,6 +130,7 @@ $( document ).ready(function() {
     $(document).on('submit', '#add_update_form', function(){
         let form_data = new FormData();
         let url;
+        let message;
         for (var index = 0; index < files.length; index++) {
             form_data.append("images[]", files[index]);
         }
@@ -134,13 +139,21 @@ $( document ).ready(function() {
         form_data.append('price', $('#modal_price').val());
         form_data.append('stock', $('#modal_stock').val());
         form_data.append('category', $('#modal_category').val());
-        form_data.append('main', $('.main_pic:checked').val());  
+         
+        if($('.main_pic:checked').attr('data-id')){
+            form_data.append('old_main', "retained");
+        }else{
+            form_data.append('old_main', "changed");
+        }
+        form_data.append('main', $('.main_pic:checked').val()); 
 
         if($('#submit_modal_btn').val() == "ADD"){
             url = "add_product"
+            message = "Successfully Added a Product!";
         }else{
             url = "update_product";
             form_data.append('product_id', $('#form_product_id').val());
+            message = "Successfully Updated a Product!";
         }
 
         $.ajax({
@@ -156,7 +169,7 @@ $( document ).ready(function() {
                     $('#modal_messages').html(response);
                 }else{
                     $('#add_update_product_modal').modal('hide');
-                    $('#message_modal_body').html('<h1>SUCCESSFULLY ADDED A PRODUCT</h1>');
+                    $('#message_modal_body').prepend('<h1>'+message+'</h1>');
                     $('#message_modal').modal('show');
                 }
             }, error:function(error){
@@ -176,10 +189,37 @@ $( document ).ready(function() {
         $('#update_frames').empty();
         $('#frames').empty();
         $('#modal_messages').empty();
-        // $('#filter_form').submit();
+        $('#filter_form').submit();
     })
 
     $(document).on('change', '.main_pic', function(){
         $('.main_pic').not(this).prop('checked', false);     
+    })
+
+// CATEGORY THINGY
+    $(document).on('change','#modal_category',function(){
+        if($(this).val()=="add_category_btn"){
+            $('#new_category').removeAttr('hidden');
+            $('#new_category').focus()
+        }
+        return false;
+    })
+
+    $(document).on('click','#add_new_category', function(){
+        let data = {"category": $(this).siblings('#new_category').val()};
+        $.post(base_url+'add_category', data, function(res){
+            $('#modal_category').val($("#modal_category option:first").val());
+            $('input#new_category').val('');
+            $('#new_category').attr('hidden', true);
+            $('select > #add_category_btn').before('<option val="'+res+'">'+data.category+'</option>')
+        })
+        return false;
+    })
+
+    $(document).on('click', '#cancel_new_category', function(){
+        $('#modal_category').val($("#modal_category option:first").val());
+        $('input#new_category').val('');
+        $('#new_category').attr('hidden', true);
+        return false;
     })
 });

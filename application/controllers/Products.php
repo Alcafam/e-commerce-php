@@ -70,33 +70,7 @@ class Products extends CI_Controller {
         }else{
             /* FILE UPLOAD */
             $inserted_id = $this->Product->add_product($data);
-            $files = $_FILES;
-            for($i = 0; $i < count($files['images']['name']); $i++){ 
-                
-                $_FILES['images']['name'] = $files['images']['name'][$i]; 
-                $_FILES['images']['type'] = $files['images']['type'][$i]; 
-                $_FILES['images']['tmp_name'] = $files['images']['tmp_name'][$i]; 
-                $_FILES['images']['error'] = $files['images']['error'][$i]; 
-                $_FILES['images']['size'] = $files['images']['size'][$i];
-
-                $path= 'assets/images/products/'.$inserted_id.'/';
-                $config['upload_path'] = $path;  
-                $config['allowed_types'] = 'gif|jpg|png';
-                $config['overwrite'] = TRUE;
-                $config['remove_spaces'] = FALSE;
-
-                if(!is_dir($path)){
-                    mkdir($path,0655,true);
-                }
-
-                $this->load->library('upload', $config); 
-                $this->upload->initialize($config); 
-
-                if(!$this->upload->do_upload('images')){ 
-                    $error = array('error' => $this->upload->display_errors());
-                    var_dump($error);  
-                } 
-            }
+            $this->save_image($_FILES, $inserted_id);
             echo json_encode("success");
         }
     }
@@ -108,10 +82,16 @@ class Products extends CI_Controller {
 
     function delete_image(){
         $data = $this->input->post();
-        $success = $this->Product->delete_image($data);
-        if($success == true){
-            unlink(FCPATH.'assets\images\products/'.$data['product_id'].'/'.$data['name']);
+        $check_image = $this->Product->validate_image($data['product_id'],$data['json_index']);
+        if($check_image !== "success"){
+            echo $check_image;
+        }else{
+            $success = $this->Product->delete_image($data);
+            if($success == true){
+                unlink(FCPATH.'assets\images\products/'.$data['product_id'].'/'.$data['name']);
+            }
         }
+        
     }
 
     function update_product(){
@@ -120,39 +100,47 @@ class Products extends CI_Controller {
         if($validation!=="success"){
             echo json_encode($validation);
         }else{
-            echo json_encode("emmmeee");
             /* FILE UPLOAD */
-            // $inserted_id = $this->Product->add_product($data);
-            // $files = $_FILES;
-            // for($i = 0; $i < count($files['images']['name']); $i++){ 
-                
-            //     $_FILES['images']['name'] = $files['images']['name'][$i]; 
-            //     $_FILES['images']['type'] = $files['images']['type'][$i]; 
-            //     $_FILES['images']['tmp_name'] = $files['images']['tmp_name'][$i]; 
-            //     $_FILES['images']['error'] = $files['images']['error'][$i]; 
-            //     $_FILES['images']['size'] = $files['images']['size'][$i];
-
-            //     $path= 'assets/images/products/'.$inserted_id.'/';
-            //     $config['upload_path'] = $path;  
-            //     $config['allowed_types'] = 'gif|jpg|png';
-            //     $config['overwrite'] = TRUE;
-            //     $config['remove_spaces'] = FALSE;
-
-            //     if(!is_dir($path)){
-            //         mkdir($path,0655,true);
-            //     }
-
-            //     $this->load->library('upload', $config); 
-            //     $this->upload->initialize($config); 
-
-            //     if(!$this->upload->do_upload('images')){ 
-            //         $error = array('error' => $this->upload->display_errors());
-            //         var_dump($error);  
-            //     } 
-            // }
-            // echo json_encode("success");
+            $id = $data['product_id'];
+            if($_FILES){
+                $update = $this->Product->update_image($data);
+                $this->save_image($_FILES, $id);
+            }
+            $update_product = $this->Product->update_product($data);
+            echo json_encode("success");
         }
-        // var_dump($validation);
+    }
+
+    function save_image($files, $id){
+        for($i = 0; $i < count($files['images']['name']); $i++){ 
+            $_FILES['images']['name'] = $files['images']['name'][$i]; 
+            $_FILES['images']['type'] = $files['images']['type'][$i]; 
+            $_FILES['images']['tmp_name'] = $files['images']['tmp_name'][$i]; 
+            $_FILES['images']['error'] = $files['images']['error'][$i]; 
+            $_FILES['images']['size'] = $files['images']['size'][$i];
+
+            $path= 'assets/images/products/'.$id.'/';
+            $config['upload_path'] = $path;  
+            $config['allowed_types'] = 'gif|jpg|png';
+            $config['overwrite'] = TRUE;
+            $config['remove_spaces'] = FALSE;
+
+            if(!is_dir($path)){
+                mkdir($path,0655,true);
+            }
+
+            $this->load->library('upload', $config); 
+            $this->upload->initialize($config); 
+
+            if(!$this->upload->do_upload('images')){ 
+                $error = array('error' => $this->upload->display_errors());
+            } 
+        }
+    }
+
+    function add_category(){
+        $inserted_id = $this->Product->add_new_category($this->input->post());
+        echo json_encode($inserted_id);
     }
 }
 

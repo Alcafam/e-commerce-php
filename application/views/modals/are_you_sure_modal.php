@@ -17,8 +17,8 @@
 <div class="modal" tabindex="-1" id="message_modal">
     <div class="modal-dialog">
         <div class="modal-content text-center">
-            <div class="modal-body bg-success" id="message_modal_body">
-                <h1>SUCCESSFULLY UPDATED STATUS!</h1>
+            <div class="modal-body bg-white" id="message_modal_body">
+                <h1>Successfully Updated Status!</h1>
                 <button type="button" class="btn btn-warning" data-bs-dismiss="modal" aria-label="Close">Ok</button>
             </div>
         </div>

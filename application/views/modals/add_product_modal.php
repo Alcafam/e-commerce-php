@@ -17,17 +17,23 @@
             </div>
 
             <div class="mb-3 row mx-1">
-                <select class="form-control col d-inline-block mx-1" name="category" id="modal_category">
+                <select class="form-control col mx-1" name="category" id="modal_category">
                     <option value="">--- Select Category ---</option>
 <?php           foreach($categories as $cat){
 ?>                  <option value="<?= $cat['id'] ?>"><?= $cat['category'] ?></option>
 <?php           }
-?>                  <option>
-                        <button>-- Add Category--</button>
+?>                  <option value="add_category_btn" class="bg-light" id="add_category_btn">
+                        --Add Category--
                     </option>
                 </select>
-                <input type="text" class="form-control col d-inline-block mx-1" name="price" id="modal_price" placeholder="Price">
-                <input type="text" class="form-control col d-inline-block mx-1" name="stock"  id="modal_stock" placeholder="Stocks">
+                <input type="text" class="form-control col mx-1" name="price" id="modal_price" placeholder="Price">
+                <input type="text" class="form-control col mx-1" name="stock"  id="modal_stock" placeholder="Stocks">
+            </div>
+
+            <div id="new_category" class="my-2 me-4" hidden>
+                    <input class="form-control d-inline-block w-25 mx-1" name="new_category" id="new_category" placeholder="Enter new category">
+                    <button id="add_new_category" class="d-inline-block "> Add </button>
+                    <button id="cancel_new_category" class="d-inline-block bg-warning"> Cancel </button>
             </div>
 
             <div class="mb-3">
@@ -48,9 +54,9 @@
 
 <div class="modal" tabindex="-1" id="message_modal">
     <div class="modal-dialog">
-        <div class="modal-content text-center">
-            <div class="modal-body bg-success" id="message_modal_body">
-                <button type="button" class="btn btn-warning d-block" data-bs-dismiss="modal" aria-label="Close">Ok</button>
+        <div class="modal-content">
+            <div class="modal-body bg-white text-center" id="message_modal_body">
+                <button type="button" class="btn btn-warning" data-bs-dismiss="modal" aria-label="Close">Ok</button>
             </div>
         </div>
     </div>

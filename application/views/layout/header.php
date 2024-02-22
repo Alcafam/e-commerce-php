@@ -22,7 +22,7 @@
 ?>          <script src="<?= base_url('assets/jquery/orders.js') ?>"></script>
 <?php   }
         if(uri_string() == 'products'){
-?>          <script src="<?= base_url('assets/jquery/products.js') ?>"></script>
+?>          <script src="<?= base_url('assets/jquery/product.js') ?>"></script>
 <?php   }
 ?>
     

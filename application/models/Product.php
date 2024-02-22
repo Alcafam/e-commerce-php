@@ -132,9 +132,9 @@ function validate_product($data){
     $this->form_validation->set_rules('category', 'Category', 'required');
     $this->form_validation->set_rules('main', 'Main Image', 'required');
     
-    if(isset($_FILES['images']) && ($data['main'] == 'undefined' || $data['main'] =='')){
+    if(($data['main'] == 'undefined' || $data['main'] =='')){
         $errors .= '<div class="alert alert-danger" role="alert">Pick a Main Image!</div>';
-    } 
+    }
 
     if(!isset($_FILES['images']) && !isset($data['product_id'])){
         $errors .= '<div class="alert alert-danger" role="alert">Select an Image!!</div>';
@@ -145,6 +145,13 @@ function validate_product($data){
         return $errors;
     }else{
         return 'success';
+    }
+}
+function validate_image($id, $json_id){
+    if($json_id=='-1'){
+        return '<div class="alert alert-danger" role="alert">Have a Main Image before deleting this Main image!</div>';
+    }else{
+        return "success";
     }
 }
 
@@ -164,8 +171,26 @@ function add_product($data){
         $this->security->xss_clean($data['image']),
         $this->security->xss_clean($data['stock']),
     );
+
     $this->db->query($query, $values);
     return $this->db->insert_id();
+}
+
+function update_image($data){
+    $main = $this->check_main($_FILES['images']['name'], $data);
+}
+
+function update_product($data){
+    $query="UPDATE products SET category_id=?,product_name=?,description=?,price=?,stock=?,updated_at=NOW() WHERE id = ?";
+    $values=array(
+        $this->security->xss_clean($data['category']),
+        $this->security->xss_clean($data['name']),
+        $this->security->xss_clean($data['description']),
+        $this->security->xss_clean($data['price']),
+        $this->security->xss_clean($data['stock']),
+        $this->security->xss_clean($data['product_id'])
+    );
+    $this->db->query($query, $values);
 }
 
 function delete_image($data){
@@ -174,7 +199,14 @@ function delete_image($data){
     }else{
         return $this->db->query("UPDATE products set images = JSON_REMOVE(images,'$.extras[{$this->security->xss_clean($data['json_index'])}]') WHERE id={$this->security->xss_clean($data['product_id'])}");
     }
-    
+}
+
+function add_new_category($data){
+    // echo "INSERT INTO categories (category, created_at, updated_at) VALUES('{$this->security->xss_clean($data['category'])}', NOW(), NOW())";
+    // die();
+    $this->db->query("INSERT INTO categories (category, created_at, updated_at) VALUES('{$this->security->xss_clean($data['category'])}', NOW(), NOW())");
+    return $this->db->insert_id();
+
 }
 // =========== END OF CRUDS =========== //
 
@@ -192,16 +224,41 @@ function json_stringify($jsons,$main){
     $jsons = array_values($jsons);
     if(!empty($jsons)){
         foreach($jsons as $key=>$value){
-            if($key == count($jsons)-1 ){
-                $string .= '"'.$value.'"]}';
+            if($key==count($jsons)-1){
+                $string .= '"'.$value.'"';
             }else{
-                $string .= '"'.$value.'", ';
+                $string .= '"'.$value.'",';
             }
         }
-    }else{
-        $string .= "]}";
     }
+    $string .= "]}";
     return $string;
+}
+
+function check_main($new_images, $old_images){
+    if($old_images['old_main'] == "changed"){
+        $old_main = $this->db->query(
+            "UPDATE products
+            SET images = JSON_ARRAY_APPEND(images, '$.extras', JSON_EXTRACT(images, '$.main_pic')), updated_at=NOW()
+            WHERE id = {$old_images['product_id']}"
+        );
+        $new_main = $this->db->query(
+            'UPDATE products
+            SET images = JSON_REPLACE(images, "$.main_pic", "'.$new_images[$old_images['main']].'"), updated_at=NOW()
+            WHERE id = '.$old_images['product_id']
+        );
+        unset($new_images[$old_images['main']]);
+        $new_images = array_values($new_images);
+    }
+    if(!empty($new_images)){
+        foreach($new_images as $new){
+            $this->db->query(
+                'UPDATE products
+                SET images = JSON_ARRAY_APPEND(images, "$.extras", "'.$new.'"), updated_at=NOW()
+                WHERE id = '.$old_images["product_id"]
+            );
+        }
+    }
 }
 // =========== END OF JSON_DECODE =========== //
 }

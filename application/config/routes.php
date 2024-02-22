@@ -28,6 +28,7 @@ $route['update_status'] = 'orders/update_status';
 $route['get_product_details/(:any)'] = 'products/get_product_details/$1';
 $route['delete_image'] = 'products/delete_image';
 $route['update_product'] = 'products/update_product';
+$route['add_category'] = 'products/add_category';
 
 $route['404_override'] = '';
 $route['translate_uri_dashes'] = FALSE;
