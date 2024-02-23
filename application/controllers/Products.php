@@ -36,6 +36,7 @@ class Products extends CI_Controller {
     function get_product_table(){
         $view_data['categories'] = $this->Product->get_all_categories();
         $view_data['total'] = $this->Product->get_total_product();
+        
         if($this->input->post('category')){
             $view_data['active'] = $this->input->post('category');
         }else{
@@ -47,16 +48,17 @@ class Products extends CI_Controller {
             if(empty($filters['last_row'])){
                 $filters['last_row']=0;
             }
+
             $view_data['products']=$this->Product->get_filtered_product($filters);
             $view_data['pages'] = $this->Product->get_pages(count($view_data['products']));
             $view_data['filter'] = "Search Result (".count($view_data['products']).")";
         }else if(!$this->input->post('last_row') && empty($this->input->post('search_filter')) && ($this->input->post('category') || !$this->input->post('category'))){
             $view_data['pages'] = $this->Product->get_product_count();
-            $view_data['products']=$this->Product->get_all_product(0);
+            $view_data['products']=$this->Product->get_products(0);
             $view_data['filter'] = "All Products(".count($view_data['products']).")";
         }else{
             $view_data['pages'] = $this->Product->get_product_count();
-            $view_data['products']=$this->Product->get_all_product($this->input->post('last_row'));
+            $view_data['products']=$this->Product->get_products($this->input->post('last_row'));
             $view_data['filter'] = "All Products(".count($view_data['products']).")";
         }
         $this->load->view('dashboard/product_table', $view_data);
@@ -141,6 +143,18 @@ class Products extends CI_Controller {
     function add_category(){
         $inserted_id = $this->Product->add_new_category($this->input->post());
         echo json_encode($inserted_id);
+    }
+
+    function view_product($id){
+        $view_data = $this->init();
+        $view_data['product'] = $this->Product->get_product_by_id($id);
+        $this->load_view($view_data['product']['product_name'], $view_data);
+        if($this->session->userdata('role')==0){
+            $this->load->view('layout/user_side_nav', $view_data);
+        }else{
+            $this->load->view('layout/side_nav', $view_data);
+        }
+        $this->load->view('dashboard/product_detail', $view_data);
     }
 }
 

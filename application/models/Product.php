@@ -52,7 +52,13 @@ class Product extends CI_Model
         return $pages;
     }
 
-    function get_all_product($last_row){ 
+    function get_all_products($last_row){
+        $results = $this->db->query("SELECT * FROM products LIMIT {$last_row}, 8")->result_array();
+        $results = $this->decode_images($results);
+        return $results;
+    }
+
+    function get_products($last_row){ 
         $query =
             "SELECT p.*, c.category, 
                 sum(CASE 
@@ -105,7 +111,11 @@ class Product extends CI_Model
     }
 
     function get_product_by_id($id){
-        $results = $this->db->query("SELECT *, JSON_VALUE(images,'$.main_pic') AS main_pic, JSON_VALUE(images,'$.extras') AS extras FROM products WHERE id =  {$this->security->xss_clean($id)}")->result_array()[0];
+        $results = $this->db->query(
+            "SELECT p.*, JSON_VALUE(p.images,'$.main_pic') AS main_pic, JSON_VALUE(p.images,'$.extras') AS extras, c.category
+            FROM products p
+            LEFT JOIN categories c ON c.id = p.category_id
+            WHERE p.id =  {$this->security->xss_clean($id)}")->result_array()[0];
         $results['extras'] = json_decode($results['extras']);
         $results['images'] = array();
         $results['images'][0]['path'] = base_url().'assets/images/products/'.$id.'/'.$results['main_pic'];

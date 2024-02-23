@@ -7,6 +7,7 @@ class Catalogs extends CI_Controller {
 		parent::__construct();
 		$this->load->model('User');
         $this->load->model('Product');
+        $this->load->model('Catalog');
  	}
 
      function init(){
@@ -24,9 +25,7 @@ class Catalogs extends CI_Controller {
                 redirect(base_url('orders'));
             }else{
                 $view_data=$this->init();
-                $view_data['categories'] = $this->Product->get_all_categories();
-                $view_data['total'] = count($this->Product->get_all_product());
-    
+                
                 $view_data['title'] = "Order Dashboard - Emmeness";
                 $this->load->view('layout/header', $view_data);
                 $this->load->view('layout/navbar', $view_data);
@@ -37,14 +36,45 @@ class Catalogs extends CI_Controller {
 	}
 
     function get_catalog_html(){
-        if($this->input->get()){
-            $view_data['products']=$this->Product->get_all_product();
+        $view_data['categories'] = $this->Product->get_all_categories();
+        $view_data['total'] = $this->Product->get_total_product();
+
+        if($this->input->post('category')){
+            $view_data['active'] = $this->input->post('category');
+        }else{
+            $view_data['active'] = '';
+        }
+
+        if($this->input->post('search_filter') || $this->input->post('category')){
+            $filters = $this->input->post();
+            if(empty($filters['last_row'])){
+                $filters['last_row']=0;
+            }
+
+            $view_data['products']=$this->Catalog->get_filtered_catalog($filters);
+            $view_data['pages'] = $this->Product->get_pages(count($view_data['products']));
+            $view_data['filter'] = "Search Result(".count($view_data['products']).")";
+        }else if(!$this->input->post('last_row') && empty($this->input->post('search_filter')) && ($this->input->post('category') || !$this->input->post('category'))){
+            $view_data['pages'] = $this->Product->get_product_count();
+            $view_data['products']=$this->Product->get_all_products(0);
             $view_data['filter'] = "All Products(".count($view_data['products']).")";
         }else{
-            $view_data['products']=$this->Product->get_all_product();
+            $view_data['pages'] = $this->Product->get_product_count();
+            $view_data['products']=$this->Product->get_all_products($this->input->post('last_row'));
             $view_data['filter'] = "All Products(".count($view_data['products']).")";
         }
         $this->load->view('dashboard/product_dashboard', $view_data);
+    }
+
+    function add_to_cart(){
+        $data = $this->input->post();
+        $validation = $this->Catalog->validate_cart($data);
+        if($validation!="success"){
+            $this->session->set_flashdata('input_errors', $validation);
+            redirect(base_url('view_product/'.$data['product_id']));
+        }else{
+            $catalog = $this->Catalog->add_to_cart($data);
+        }
     }
 
 }

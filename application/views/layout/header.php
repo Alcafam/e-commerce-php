@@ -8,7 +8,7 @@
     <!-- BOOTSTRAP -->
     <link rel="stylesheet" type="text/css" href="<?=base_url('assets/css/darkly_bootstraps.css')?>">
     <!-- CSS -->
-    <link rel="stylesheet" type="text/css" href="<?=base_url('assets/css/my_style.css')?>">
+    <link rel="stylesheet" type="text/css" href="<?=base_url('assets/css/my_styles.css')?>">
     <link rel="stylesheet" type="text/css" href="<?=base_url('assets/css/side_navs.css')?>">
     <link rel="stylesheet" type="text/css" href="<?=base_url('assets/css/fontawesome.css')?>">
     <!-- JQUERY DEPENDENCIES -->
@@ -16,13 +16,23 @@
     <script src="<?= base_url('assets/dependencies/bootstrap.js') ?>"></script>
     <!-- JQUERY -->
 <?php   if(uri_string() == 'catalog'){
-?>          <script src="<?= base_url('assets/jquery/catalog.js') ?>"></script>
+?>          <script src="<?= base_url('assets/jquery/catalogs.js') ?>"></script>
 <?php   }
         if(uri_string() == 'orders'){
 ?>          <script src="<?= base_url('assets/jquery/orders.js') ?>"></script>
 <?php   }
         if(uri_string() == 'products'){
 ?>          <script src="<?= base_url('assets/jquery/product.js') ?>"></script>
+<?php   }
+        if(uri_string() != 'login' || uri_string() != 'registration'){ 
+?>
+    <script>
+        $(document).ready(function () {
+            $('#sidebarCollapse').on('click', function () {
+                $('#sidebar').toggleClass('active');
+            });
+        });
+    </script>
 <?php   }
 ?>
     

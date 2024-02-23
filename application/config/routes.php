@@ -22,6 +22,9 @@ $route['get_product_table'] = 'products/get_product_table';
 $route['catalog'] = 'catalogs';
 $route['get_catalog_html'] = 'catalogs/get_catalog_html';
 
+// 
+$route['view_product/(:any)'] = 'products/view_product/$1';
+
 // CRUD
 $route['add_product'] = 'products/add_product';
 $route['update_status'] = 'orders/update_status';
@@ -29,6 +32,6 @@ $route['get_product_details/(:any)'] = 'products/get_product_details/$1';
 $route['delete_image'] = 'products/delete_image';
 $route['update_product'] = 'products/update_product';
 $route['add_category'] = 'products/add_category';
-
+$route['add_to_cart'] = 'catalogs/add_to_cart';
 $route['404_override'] = '';
 $route['translate_uri_dashes'] = FALSE;

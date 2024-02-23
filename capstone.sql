@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1:3306
--- Generation Time: Feb 21, 2024 at 02:36 PM
+-- Generation Time: Feb 23, 2024 at 08:31 AM
 -- Server version: 8.0.31
 -- PHP Version: 7.4.33
 
@@ -20,6 +20,24 @@ SET time_zone = "+00:00";
 --
 -- Database: `capstone`
 --
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `addresses`
+--
+
+DROP TABLE IF EXISTS `addresses`;
+CREATE TABLE IF NOT EXISTS `addresses` (
+  `id` int UNSIGNED NOT NULL AUTO_INCREMENT,
+  `user_id` int UNSIGNED NOT NULL,
+  `address_type` tinyint DEFAULT NULL,
+  `address` varchar(250) DEFAULT NULL,
+  `created_at` datetime DEFAULT NULL,
+  `updated_at` datetime DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `fk_addresses_users1_idx` (`user_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 -- --------------------------------------------------------
 
@@ -72,12 +90,12 @@ CREATE TABLE IF NOT EXISTS `orders` (
 --
 
 INSERT INTO `orders` (`id`, `user_id`, `status_id`, `shipping_address`, `created_at`, `updated_at`) VALUES
-(1, 2, 4, '{\"city\": \"Baguio City\", \"house\": \"\", \"street\": \"Purok 1\", \"zipcode\": 2600, \"barangay\": \"Holyghost Ext\", \"province\": \"Benguet\"}', '2024-02-21 00:42:53', '2024-02-21 00:42:53'),
-(2, 2, 1, '{\"city\": \"Baguio City\", \"house\": \"\", \"street\": \"Purok 1\", \"zipcode\": 2600, \"barangay\": \"Holyghost Ext\", \"province\": \"Benguet\"}', '2024-02-21 00:42:53', '2024-02-21 00:42:53'),
-(3, 2, 1, '{\"city\": \"Baguio City\", \"house\": \"\", \"street\": \"Purok 1\", \"zipcode\": 2600, \"barangay\": \"Holyghost Ext\", \"province\": \"Benguet\"}', '2024-02-21 00:42:53', '2024-02-21 00:42:53'),
+(1, 2, 3, '{\"city\": \"Baguio City\", \"house\": \"\", \"street\": \"Purok 1\", \"zipcode\": 2600, \"barangay\": \"Holyghost Ext\", \"province\": \"Benguet\"}', '2024-02-21 00:42:53', '2024-02-23 15:13:37'),
+(2, 2, 3, '{\"city\": \"Baguio City\", \"house\": \"\", \"street\": \"Purok 1\", \"zipcode\": 2600, \"barangay\": \"Holyghost Ext\", \"province\": \"Benguet\"}', '2024-02-21 00:42:53', '2024-02-22 09:12:33'),
+(3, 2, 2, '{\"city\": \"Baguio City\", \"house\": \"\", \"street\": \"Purok 1\", \"zipcode\": 2600, \"barangay\": \"Holyghost Ext\", \"province\": \"Benguet\"}', '2024-02-21 00:42:53', '2024-02-22 09:13:14'),
 (4, 2, 3, '{\"city\": \"Baguio City\", \"house\": \"\", \"street\": \"Purok 1\", \"zipcode\": 2600, \"barangay\": \"Holyghost Ext\", \"province\": \"Benguet\"}', '2024-02-21 00:42:53', '2024-02-21 00:42:53'),
 (7, 2, 3, '{\"city\": \"Baguio City\", \"house\": \"\", \"street\": \"Purok 1\", \"zipcode\": 2600, \"barangay\": \"Holyghost Ext\", \"province\": \"Benguet\"}', '2024-02-21 00:42:53', '2024-02-21 00:42:53'),
-(8, 2, 2, '{\"city\": \"Baguio City\", \"house\": \"\", \"street\": \"Purok 1\", \"zipcode\": 2600, \"barangay\": \"Holyghost Ext\", \"province\": \"Benguet\"}', '2024-02-21 00:42:53', '2024-02-21 00:42:53');
+(8, 2, 3, '{\"city\": \"Baguio City\", \"house\": \"\", \"street\": \"Purok 1\", \"zipcode\": 2600, \"barangay\": \"Holyghost Ext\", \"province\": \"Benguet\"}', '2024-02-21 00:42:53', '2024-02-22 09:13:39');
 
 -- --------------------------------------------------------
 
@@ -137,13 +155,13 @@ CREATE TABLE IF NOT EXISTS `products` (
 
 INSERT INTO `products` (`id`, `category_id`, `product_name`, `description`, `price`, `images`, `stock`, `created_at`, `updated_at`) VALUES
 (1, 1, 'Purple Elegant Gown', 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.', '1599.00', '{\"extras\": [], \"main_pic\": \"1.png\"}', '5', '2024-02-17 01:48:42', '2024-02-17 01:48:42'),
-(2, 1, 'Dark Blue Elegant Gown', 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.', '1499.00', '{\"extras\": [], \"main_pic\": \"2.png\"}', '2', '2024-02-17 01:48:42', '2024-02-17 01:48:42'),
-(4, 4, 'Winter Jacket', 'Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo.', '1239.00', '{\"extras\": [\"13.png\", \"14.png\"], \"main_pic\": \"12.png\"}', '102', '2024-02-17 01:48:42', '2024-02-17 01:48:42'),
+(2, 1, 'Dark Blue Elegant Gown', 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.', '1499.00', '{\"extras\": [], \"main_pic\": \"2.png\"}', '2', '2024-02-17 01:48:42', '2024-02-23 15:13:53'),
+(4, 4, 'Winter Jacket', 'Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo.', '1239.00', '{\"extras\": [\"14.png\"], \"main_pic\": \"12.png\"}', '102', '2024-02-17 01:48:42', '2024-02-17 01:48:42'),
 (5, 4, 'Denim Jacket', 'Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo.', '1599.00', '{\"extras\": [], \"main_pic\": \"17.png\"}', '145', '2024-02-17 01:48:42', '2024-02-17 01:48:42'),
 (6, 5, 'White Long Sleeve Blouse', 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.', '469.00', '{\"extras\": [], \"main_pic\": \"25.png\"}', '46', '2024-02-17 01:48:42', '2024-02-17 01:48:42'),
-(16, 1, 'Light Casual Dress', 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam hendrerit nisi sed sollicitudin pellentesque. Nunc posuere purus rhoncus pulvinar aliquam. Ut aliquet tristique nisl vitae volutpat. Nulla aliquet porttitor venenatis. Donec a dui et dui fringilla consectetur id nec massa. Aliquam erat volutpat. Sed ut dui ut lacus dictum fermentum vel tincidunt neque. Sed sed lacinia lectus. Duis sit amet sodales felis. Duis nunc eros, mattis at dui ac, convallis semper risus. In adipiscing ultrices tellus, in suscipit massa vehicula eu.', '467.00', '{\"main_pic\": \"7.png\", \"extras\": [\"10.png\", \"11.png\"]}', '123', '2024-02-21 19:56:09', '2024-02-21 19:56:09'),
+(16, 1, 'Light Casual Dress', 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam hendrerit nisi sed sollicitudin pellentesque. Nunc posuere purus rhoncus pulvinar aliquam. Ut aliquet tristique nisl vitae volutpat. Nulla aliquet porttitor venenatis. Donec a dui et dui fringilla consectetur id nec massa. Aliquam erat volutpat. Sed ut dui ut lacus dictum fermentum vel tincidunt neque. Sed sed lacinia lectus. Duis sit amet sodales felis. Duis nunc eros, mattis at dui ac, convallis semper risus. In adipiscing ultrices tellus, in suscipit massa vehicula eu.', '467.00', '{\"extras\": [\"10.png\"], \"main_pic\": \"7.png\"}', '123', '2024-02-21 19:56:09', '2024-02-21 19:56:09'),
 (17, 2, 'Denim Pant', 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.', '599.00', '{\"main_pic\": \"21.png\", \"extras\": []}', '87', '2024-02-21 22:32:41', '2024-02-21 22:32:41'),
-(18, 1, 'Dark Casual Dress', 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Massa id neque aliquam vestibulum morbi blandit cursus risus. Rutrum quisque non tellus orci. Tempus egestas sed sed risus pretium quam vulputate dignissim. Morbi tristique senectus et netus et malesuada fames ac turpis. Semper risus in hendrerit gravida. Molestie at elementum eu facilisis sed. Justo nec ultrices dui sapien. Purus sit amet volutpat consequat mauris nunc congue nisi vitae. Platea dictumst vestibulum rhoncus est pellentesque elit ullamcorper. Nec sagittis aliquam malesuada bibendum arcu vitae elementum.', '467.00', '{\"main_pic\": \"8.png\", \"extras\": [\"21.png\", \"6.png\", \"9.png\"]}', '232', '2024-02-21 22:34:45', '2024-02-21 22:34:45'),
+(18, 1, 'Dark Casual Dress', 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Massa id neque aliquam vestibulum morbi blandit cursus risus. Rutrum quisque non tellus orci. Tempus egestas sed sed risus pretium quam vulputate dignissim. Morbi tristique senectus et netus et malesuada fames ac turpis. Semper risus in hendrerit gravida. Molestie at elementum eu facilisis sed. Justo nec ultrices dui sapien. Purus sit amet volutpat consequat mauris nunc congue nisi vitae. Platea dictumst vestibulum rhoncus est pellentesque elit ullamcorper. Nec sagittis aliquam malesuada bibendum arcu vitae elementum.', '467.00', '{\"extras\": [\"6.png\", \"9.png\"], \"main_pic\": \"8.png\"}', '232', '2024-02-21 22:34:45', '2024-02-23 11:13:57'),
 (19, 3, 'Casual Polo', 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Massa id neque aliquam vestibulum morbi blandit cursus risus. Rutrum quisque non tellus orci. Tempus egestas sed sed risus pretium quam vulputate dignissim. Morbi tristique senectus et netus et malesuada fames ac turpis. Semper risus in hendrerit gravida. Molestie at elementum eu facilisis sed. Justo nec ultrices dui sapien. Purus sit amet volutpat consequat mauris nunc congue nisi vitae. Platea dictumst vestibulum rhoncus est pellentesque elit ullamcorper. Nec sagittis aliquam malesuada bibendum arcu vitae elementum.', '355.00', '{\"main_pic\": \"24.png\", \"extras\": [\"23.png\"]}', '56', '2024-02-21 22:35:49', '2024-02-21 22:35:49');
 
 -- --------------------------------------------------------
@@ -156,11 +174,13 @@ DROP TABLE IF EXISTS `reviews`;
 CREATE TABLE IF NOT EXISTS `reviews` (
   `id` int UNSIGNED NOT NULL AUTO_INCREMENT,
   `products_id` int UNSIGNED NOT NULL,
+  `user_id` int UNSIGNED NOT NULL,
   `review` longtext,
   `created_at` datetime DEFAULT NULL,
   `updated_at` datetime DEFAULT NULL,
   PRIMARY KEY (`id`),
-  KEY `fk_reviews_products1_idx` (`products_id`)
+  KEY `fk_reviews_products1_idx` (`products_id`),
+  KEY `fk_reviews_users1_idx` (`user_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 -- --------------------------------------------------------
@@ -222,6 +242,12 @@ INSERT INTO `users` (`id`, `is_admin`, `first_name`, `last_name`, `email`, `pass
 --
 
 --
+-- Constraints for table `addresses`
+--
+ALTER TABLE `addresses`
+  ADD CONSTRAINT `fk_addresses_users1` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`);
+
+--
 -- Constraints for table `orders`
 --
 ALTER TABLE `orders`
@@ -245,7 +271,8 @@ ALTER TABLE `products`
 -- Constraints for table `reviews`
 --
 ALTER TABLE `reviews`
-  ADD CONSTRAINT `fk_reviews_products1` FOREIGN KEY (`products_id`) REFERENCES `products` (`id`);
+  ADD CONSTRAINT `fk_reviews_products1` FOREIGN KEY (`products_id`) REFERENCES `products` (`id`),
+  ADD CONSTRAINT `fk_reviews_users1` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`);
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

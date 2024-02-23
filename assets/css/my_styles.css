@@ -172,8 +172,13 @@ html {
     background-color:#e74c3c;
 }
 
-
 .card:hover{
     background-color:#375a7f;
     opacity:0.65;
 }
+
+.toggle_image:hover{
+    opacity:.8;
+}
+
+

@@ -23,7 +23,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 | a PHP script and you can easily do that on your own.
 |
 */
-$config['base_url'] = 'http://localhost/';
+$config['base_url'] = 'http://localhost/e-commerce-php-capstone';
 
 /*
 |--------------------------------------------------------------------------
@@ -457,10 +457,18 @@ $config['global_xss_filtering'] = FALSE;
 | 'csrf_regenerate' = Regenerate token on every submission
 | 'csrf_exclude_uris' = Array of URIs which ignore CSRF checks
 */
-if (stripos($_SERVER["REQUEST_URI"],'/login/login_process') === TRUE || stripos($_SERVER["REQUEST_URI"],'/registration/registration_process') === TRUE) {
-	$config['csrf_protection'] 	= TRUE;
-}else{ 
-    $config['csrf_protection'] 	= FALSE; 
+
+$csrf_on = array(
+    '/login/login_process',
+    '/registration/registration_process',
+    'add_to_cart'
+);
+if (isset($_SERVER["REQUEST_URI"])) {
+    if (in_array($_SERVER["REQUEST_URI"],$csrf_on)) {
+        $config['csrf_protection'] = TRUE;
+    }else{
+        $config['csrf_protection'] 	= FALSE; 
+    }
 }
 $config['csrf_token_name'] = 'csrf_test_name';
 $config['csrf_cookie_name'] = 'csrf_cookie_name';
