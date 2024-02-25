@@ -3,9 +3,14 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
 class Catalog extends CI_Model 
 {
+    function get_all_products($last_row, $per_row){
+        $results = $this->db->query("SELECT *, JSON_VALUE(images,'$.main_pic') AS main_pic FROM products LIMIT {$last_row}, {$per_row}")->result_array();
+        return $results;
+    }
+
     function get_filtered_catalog($filters){
         $query =
-            "SELECT p.*, c.category
+            "SELECT p.*, c.category, JSON_VALUE(p.images,'$.main_pic') AS main_pic
             FROM products p
             LEFT JOIN categories c
                 ON c.id = p.category_id
@@ -17,10 +22,9 @@ class Catalog extends CI_Model
         if(!empty($filters['category'])){
             $query .= " AND c.category = '{$this->security->xss_clean($filters['category'])}'";
         }
-        $query .= "GROUP BY p.id LIMIT {$filters['last_row']}, 5";
+        $query .= "GROUP BY p.id LIMIT {$filters['last_row']}, 8";
 
         $results = $this->db->query($query)->result_array();
-        $results = $this->decode_images($results);
         return $results;
     }
 
@@ -39,25 +43,5 @@ class Catalog extends CI_Model
         return $results;
     }
 // ============= END OF GETTERS ============= //
-
-// =========== VALIDATIONS =========== //
-function validate_cart($data){
-    $this->load->library('form_validation');
-    $this->form_validation->set_error_delimiters('<div class="alert alert-danger" role="alert">','</div>');
-    $this->form_validation->set_rules('quantity', 'Quantity', 'required|is_numeric|less_than_equal_to['.$data['stocks'].']|greater_than[0]');
-
-    if(!$this->form_validation->run()) {
-        return validation_errors();
-    }else{
-        return 'success';
-    }
 }
-// =========== END OF VALIDATIONS =========== //
-
-// =========== CRUDS =========== //
-function add_to_cart($data){
-    return $this->query->db
-}
-
-// =========== END OF CRUDS =========== //
 ?>

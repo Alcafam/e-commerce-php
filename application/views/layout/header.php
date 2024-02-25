@@ -22,7 +22,13 @@
 ?>          <script src="<?= base_url('assets/jquery/orders.js') ?>"></script>
 <?php   }
         if(uri_string() == 'products'){
-?>          <script src="<?= base_url('assets/jquery/product.js') ?>"></script>
+?>          <script src="<?= base_url('assets/jquery/products.js') ?>"></script>
+<?php   }
+        if(uri_string() == 'profile'){
+?>          <script src="<?= base_url('assets/jquery/profiles.js') ?>"></script>
+<?php   }
+        if(uri_string() == 'cart'){
+?>          <script src="<?= base_url('assets/jquery/carts.js') ?>"></script>
 <?php   }
         if(uri_string() != 'login' || uri_string() != 'registration'){ 
 ?>

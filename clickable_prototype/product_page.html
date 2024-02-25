@@ -1,0 +1,203 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="author" content="Marjy I. Galingan">
+
+    <title>Order Dashboard - Emmeness</title>
+    <!-- BOOTSTRAP -->
+    <link rel="stylesheet" type="text/css" href="/assets/css/darkly_bootstraps.css">
+    <!-- CSS -->
+    <link rel="stylesheet" type="text/css" href="/assets/css/my_styles.css">
+    <link rel="stylesheet" type="text/css" href="/assets/css/side_navs.css">
+    <link rel="stylesheet" type="text/css" href="/assets/css/fontawesome.css">
+    <!-- JQUERY DEPENDENCIES -->
+    <script src="assets/dependencies/jquery.js"></script>
+    <script src="assets/dependencies/bootstrap.js"></script>
+    <script>
+        $(document).ready(function () {
+            $('#sidebarCollapse').on('click', function () {
+                $('#sidebar').toggleClass('active');
+            });
+        });
+    </script>
+    
+
+    <!-- CONSTANTS -->
+    <script>
+        const base_url = "";
+    </script>
+</head>
+<body><nav class="navbar navbar-expand-lg bg-primary fixed-top p-0 navbar-fixed-top">
+    <div class="container-fluid">
+        <ul class="navbar-nav justify-content-start ">
+            <li class="nav-item px-3 py-2">
+                <a href="/" class="nav-link text-white px-3 m-0 p-0" aria-current="page">
+                    <img class="img-fluid m-0 p-0" src="assets/images/logo_white.png" width="100px" alt="DPWH Logo"/>
+                </a>
+            </li>
+        </ul>
+        <ul class="nav justify-content-end">
+            <li class="px-3 py-2 fs-6 fst-italic ">
+                <div>"Right Product, Right Cost, Right Quality,</div>
+                <div>Right on Time, Right People"</div>
+            </li>
+          <li class="nav-item">
+                <a class="nav-link text-white fw-bold px-3 py-2 fs-5" href="logout">Logout</a>
+            </li>
+        </ul>
+    </div>
+</nav><div class="wrapper">
+	<!-- Sidebar  -->
+	<nav id="sidebar" style="padding-top:80px">
+		<ul class="list-unstyled components">
+			<li class="active">
+				<a href="">Catalogs</a>
+			</li>
+		</ul>
+		<ul class="list-unstyled components">
+			<li >
+				<a href=""><i class="fa-solid fa-user fa-2xl pe-3"></i>Profile</a>
+			</li>
+			<li class=" mt-3">
+				<a href=""><i class="fa-solid fa-cart-shopping fa-2xl pe-3"></i>Cart (0)</a>
+			</li>
+		</ul>
+	</nav>
+
+	<!-- Page Content  -->
+	<div id="content">
+		<nav class="navbar mt-5">
+			<button type="button" id="sidebarCollapse" class="rounded-end-3">
+			&#9776;
+			</button>
+		</nav>
+		<div id="main" class="py-0 text-black">
+
+		<div class="w-75">
+    <form id="filter_form" method="POST" class="text-center d-inline-block w-75">
+        <input class="form-control me-2" type="search" name="search_filter" id="search_filter" placeholder="search product" aria-label="Search">
+    </form>
+    </div>
+    <div class="row mt-5" id="product_cards"><div class="col-2">
+    <a href="javascript:void(0)" class="category_button text-white text-decoration-none position-relative py-3 my-1 rounded-2 text-center w-50 active">
+        <span class="absolute-cat-num">10</span>
+        <span>All Products</span>
+    </a>
+      <a href="javascript:void(0)" class="category_button text-white text-decoration-none position-relative py-3 my-1 rounded-2 text-center w-50 " data-id="Dress">
+        <span class="absolute-cat-num">4</span>
+        <span>Dress</span>
+    </a>
+      <a href="javascript:void(0)" class="category_button text-white text-decoration-none position-relative py-3 my-1 rounded-2 text-center w-50 " data-id="Pant">
+        <span class="absolute-cat-num">1</span>
+        <span>Pant</span>
+    </a>
+      <a href="javascript:void(0)" class="category_button text-white text-decoration-none position-relative py-3 my-1 rounded-2 text-center w-50 " data-id="Polo">
+        <span class="absolute-cat-num">1</span>
+        <span>Polo</span>
+    </a>
+      <a href="javascript:void(0)" class="category_button text-white text-decoration-none position-relative py-3 my-1 rounded-2 text-center w-50 " data-id="Jacket">
+        <span class="absolute-cat-num">3</span>
+        <span>Jacket</span>
+    </a>
+      <a href="javascript:void(0)" class="category_button text-white text-decoration-none position-relative py-3 my-1 rounded-2 text-center w-50 " data-id="Blouse">
+        <span class="absolute-cat-num">1</span>
+        <span>Blouse</span>
+    </a>
+      <a href="javascript:void(0)" class="category_button text-white text-decoration-none position-relative py-3 my-1 rounded-2 text-center w-50 " data-id="Skirt">
+        <span class="absolute-cat-num">0</span>
+        <span>Skirt</span>
+    </a>
+    </div>
+    <div class="col-10">
+    <h1 class="fs-3">All Products(8)</h1>
+    <div class="row">
+      <div class="col-lg-3 d-flex align-items-stretch">
+            <a href="" class="card m-1 text-decoration-none">
+                <img src="assets/images/products/1/1.png" class="img-fluid" alt="...">
+                <div class="card-body">
+                    <h5 class="card-title">Purple Elegant Gown</h5>
+                    <p class="card-text">₱ 1599.00</p>
+                </div>
+            </a>
+        </div>
+      <div class="col-lg-3 d-flex align-items-stretch">
+            <a href="" class="card m-1 text-decoration-none">
+                <img src="assets/images/products/2/2.png" class="img-fluid" alt="...">
+                <div class="card-body">
+                    <h5 class="card-title">Dark Blue Elegant Gown</h5>
+                    <p class="card-text">₱ 1499.00</p>
+                </div>
+            </a>
+        </div>
+      <div class="col-lg-3 d-flex align-items-stretch">
+            <a href="" class="card m-1 text-decoration-none">
+                <img src="assets/images/products/4/14.png" class="img-fluid" alt="...">
+                <div class="card-body">
+                    <h5 class="card-title">Winter Jacket</h5>
+                    <p class="card-text">₱ 1239.00</p>
+                </div>
+            </a>
+        </div>
+      <div class="col-lg-3 d-flex align-items-stretch">
+            <a href="" class="card m-1 text-decoration-none">
+                <img src="assets/images/products/5/17.png" class="img-fluid" alt="...">
+                <div class="card-body">
+                    <h5 class="card-title">Denim Jacket</h5>
+                    <p class="card-text">₱ 1599.00</p>
+                </div>
+            </a>
+        </div>
+      <div class="col-lg-3 d-flex align-items-stretch">
+            <a href="" class="card m-1 text-decoration-none">
+                <img src="assets/images/products/6/25.png" class="img-fluid" alt="...">
+                <div class="card-body">
+                    <h5 class="card-title">White Long Sleeve Blouse</h5>
+                    <p class="card-text">₱ 469.00</p>
+                </div>
+            </a>
+        </div>
+      <div class="col-lg-3 d-flex align-items-stretch">
+            <a href="" class="card m-1 text-decoration-none">
+                <img src="assets/images/products/16/7.png" class="img-fluid" alt="...">
+                <div class="card-body">
+                    <h5 class="card-title">Light Casual Dress</h5>
+                    <p class="card-text">₱ 467.00</p>
+                </div>
+            </a>
+        </div>
+      <div class="col-lg-3 d-flex align-items-stretch">
+            <a href="" class="card m-1 text-decoration-none">
+                <img src="assets/images/products/17/21.png" class="img-fluid" alt="...">
+                <div class="card-body">
+                    <h5 class="card-title">Denim Pant</h5>
+                    <p class="card-text">₱ 599.00</p>
+                </div>
+            </a>
+        </div>
+      <div class="col-lg-3 d-flex align-items-stretch">
+            <a href="" class="card m-1 text-decoration-none">
+                <img src="assets/images/products/18/8.png" class="img-fluid" alt="...">
+                <div class="card-body">
+                    <h5 class="card-title">Dark Casual Dress</h5>
+                    <p class="card-text">₱ 467.00</p>
+                </div>
+            </a>
+        </div>
+    </div>
+    <div id="pagination" class="mt-5 text-center">
+          <a href="javascript:void(0)" class="mx-1 text-info text-decoration-none p-2 text-white bg-dark" id="go_to_page" data-id="0">1</a>
+          <a href="javascript:void(0)" class="mx-1 text-info text-decoration-none p-2 text-white bg-dark" id="go_to_page" data-id="8">2</a>
+    </div></div></div>
+    
+    </div></div>
+</div>
+
+<!-- </div>
+	</div>
+</div> -->
+
+
+
+

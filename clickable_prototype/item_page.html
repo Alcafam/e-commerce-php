@@ -1,0 +1,141 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="author" content="Marjy I. Galingan">
+
+    <title>Winter Jacket</title>
+    <!-- BOOTSTRAP -->
+    <link rel="stylesheet" type="text/css" href="assets/css/darkly_bootstraps.css">
+    <!-- CSS -->
+    <link rel="stylesheet" type="text/css" href="assets/css/my_styles.css">
+    <link rel="stylesheet" type="text/css" href="assets/css/side_navs.css">
+    <link rel="stylesheet" type="text/css" href="assets/css/fontawesome.css">
+    <!-- JQUERY DEPENDENCIES -->
+    <script src="assets/dependencies/jquery.js"></script>
+    <script src="assets/dependencies/bootstrap.js"></script>
+    <!-- JQUERY -->
+    <script>
+        $(document).ready(function () {
+            $('#sidebarCollapse').on('click', function () {
+                $('#sidebar').toggleClass('active');
+            });
+        });
+    </script>
+    
+
+    <!-- CONSTANTS -->
+    <script>
+        const base_url = "";
+    </script>
+</head>
+<body><nav class="navbar navbar-expand-lg bg-primary fixed-top p-0 navbar-fixed-top">
+    <div class="container-fluid">
+        <ul class="navbar-nav justify-content-start ">
+            <li class="nav-item px-3 py-2">
+                <a href="/" class="nav-link text-white px-3 m-0 p-0" aria-current="page">
+                    <img class="img-fluid m-0 p-0" src="assets/images/logo_white.png" width="100px" alt="DPWH Logo"/>
+                </a>
+            </li>
+        </ul>
+        <ul class="nav justify-content-end">
+            <li class="px-3 py-2 fs-6 fst-italic ">
+                <div>"Right Product, Right Cost, Right Quality,</div>
+                <div>Right on Time, Right People"</div>
+            </li>
+          <li class="nav-item">
+                <a class="nav-link text-white fw-bold px-3 py-2 fs-5" href="logout">Logout</a>
+            </li>
+        </ul>
+    </div>
+</nav><div class="wrapper">
+	<!-- Sidebar  -->
+	<nav id="sidebar" style="padding-top:80px">
+		<ul class="list-unstyled components">
+			<li >
+				<a href="">Catalogs</a>
+			</li>
+		</ul>
+		<ul class="list-unstyled components">
+			<li >
+				<a href=""><i class="fa-solid fa-user fa-2xl pe-3"></i>Profile</a>
+			</li>
+			<li class=" mt-3">
+				<a href=""><i class="fa-solid fa-cart-shopping fa-2xl pe-3"></i>Cart (0)</a>
+			</li>
+		</ul>
+	</nav>
+
+	<!-- Page Content  -->
+	<div id="content">
+		<nav class="navbar mt-5">
+			<button type="button" id="sidebarCollapse" class="rounded-end-3">
+			&#9776;
+			</button>
+		</nav>
+		<div id="main" class="py-0 text-black">
+
+		<!-- </div>
+	</div>
+</div> --><div class="row">
+    <div class="col-4">
+        <div style="width:100%"class="d-block border border-2 border-dark bg-light">
+            <img src="assets/images/products/4/14.png" class="img-fluid" id="big_pic">
+        </div>
+      <div style="height:110px" class="d-block text-center border border-2 border-dark" id="extra_pics">
+          <a href="javascript:void(0)" class="toggle_image text-decoration-none">
+                <img src="assets/images/products/4/12.png" class="d-inline-block" style="height:100px">
+            </a>
+          <a href="javascript:void(0)" class="toggle_image text-decoration-none">
+                <img src="assets/images/products/4/13.png" class="d-inline-block" style="height:100px">
+            </a>
+        </div>
+    </div>
+    <div class="col mx-3">
+        <h1>Winter Jacket</h1>
+        <p class="mt-2"><span class="fw-bold">Price: </span>&#8369;1239.00</p>
+        <p class="mt-2"><span class="fw-bold">Stock: </span>102</p>
+        <p class="mt-2">Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo.</p>
+    
+                <form method="POST" action="add_to_cart">
+            <input type="hidden" name="ci_csrf_token" value=""/>
+            <input name="product_id" value="4" hidden>
+            <input name="stocks" value="102" hidden>
+            <div class="mb-3 w-50 row mx-1">
+                <div class="col">
+                    <label for="product" class="form-label">Quantity</label>
+                    <input type="number" class="form-control mx-1" name="quantity" id="quantity" >
+                </div>
+                <div class="col">
+                    <label for="product" class="form-label">Total Amount</label>
+                    <input type="text" class="form-control mx-1" name="total_amount"  id="total_amount" disabled>
+                </div>     
+                <div class="col position-relative">
+                    <input type="submit" class="btn btn-success position-absolute bottom-0" value="Add to Cart">
+                </div>                       
+            </div>
+        </form>
+    </div>
+</div>
+<div class="row mt-5" >
+    <h1 class="fs-3">Similar Products</h1>
+          <div class="col-lg-2 d-flex align-items-stretch">
+                <a href="view_product/5" class="card m-1 text-decoration-none">
+                    <img src="assets/images/products/5/17.png" class="img-fluid"  alt="..." >
+                    <div class="card-body">
+                        <h5 class="card-title">Denim Jacket</h5>
+                        <p class="card-text">&#8369; 1599.00</p>
+                    </div>
+                </a>
+            </div>
+          <div class="col-lg-2 d-flex align-items-stretch">
+                <a href="view_product/20" class="card m-1 text-decoration-none">
+                    <img src="assets/images/products/20/15.png" class="img-fluid"  alt="..." >
+                    <div class="card-body">
+                        <h5 class="card-title">Wind Breaker Jacket</h5>
+                        <p class="card-text">&#8369; 677.00</p>
+                    </div>
+                </a>
+            </div>
+</div>

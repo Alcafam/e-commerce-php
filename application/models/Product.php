@@ -22,10 +22,10 @@ class Product extends CI_Model
         )->result_array();
     }
 
-    function get_product_count(){
+    function get_product_count($per_page){
         $total = $this->db->query("SELECT COUNT(*) AS total FROM products")->result_array();
             $last_rows=array();
-            for($i=0; $i<=$total[0]['total']; $i+=5){
+            for($i=0; $i<=$total[0]['total']; $i+=$per_page){
                 if($i == ($total[0]['total'])){
                     break;
                 }else{
@@ -40,9 +40,9 @@ class Product extends CI_Model
         return count($this->db->query("SELECT * FROM products")->result_array());
     }
 
-    function get_pages($count){
+    function get_pages($count,$per_page){
         $pages=array();
-            for($i=0; $i<=$count; $i+=5){
+            for($i=0; $i<=$count; $i+=$per_page){
                 if($i >= ($count)){
                     break;
                 }else{
@@ -52,27 +52,17 @@ class Product extends CI_Model
         return $pages;
     }
 
-    function get_all_products($last_row){
-        $results = $this->db->query("SELECT * FROM products LIMIT {$last_row}, 8")->result_array();
-        $results = $this->decode_images($results);
-        return $results;
-    }
-
     function get_products($last_row){ 
         $query =
             "SELECT p.*, c.category, 
                 sum(CASE 
-                    WHEN o.status_id != 5 
-                    THEN od.quantity 
+                    WHEN o.status_id != 1
+                    THEN o.quantity 
                     ELSE 0 
                 END) as sold
-            FROM products AS p 
-                LEFT JOIN categories c
-                    ON c.id = p.category_id
-                LEFT JOIN order_details od
-                    ON od.product_id = p.id
-                LEFT JOIN orders o
-                    ON o.id = od.order_id
+            FROM orders o
+                RIGHT JOIN products p ON p.id = o.product_id 
+                JOIN categories c ON c.id = p.category_id
             GROUP BY p.id LIMIT {$last_row}, 5";
             
         $results = $this->db->query($query)->result_array();
@@ -84,17 +74,13 @@ class Product extends CI_Model
         $query =
             "SELECT p.*, c.category, 
             sum(CASE 
-                WHEN o.status_id != 5 
-                THEN od.quantity 
+                WHEN o.status_id != 1 
+                THEN o.quantity 
                 ELSE 0 
             END) as sold
-            FROM products p
-            LEFT JOIN categories c
-                ON c.id = p.category_id
-            LEFT JOIN order_details od
-                ON od.product_id = p.id
-            LEFT JOIN orders o
-                ON o.id = od.order_id
+            FROM orders o
+                RIGHT JOIN products p ON p.id = o.product_id 
+                LEFT JOIN categories c ON c.id = p.category_id
             WHERE 
                 (p.product_name LIKE '%{$this->security->xss_clean($filters['search_filter'])}%'
                 OR p.description LIKE '%{$this->security->xss_clean($filters['search_filter'])}%'
@@ -127,6 +113,18 @@ class Product extends CI_Model
             $results['images'][$key+1]['name'] = $extra;
         }
         return $results;
+    }
+
+    function get_similar_product($id){
+        $main = $this->db->query(
+            "SELECT p.category_id FROM products p WHERE p.id = {$this->security->xss_clean($id)}")->result_array()[0];
+        return $this->db->query(
+            "SELECT p.*, JSON_VALUE(p.images,'$.main_pic') AS main_pic, JSON_VALUE(p.images,'$.extras') AS extras, c.category
+            FROM products p
+            LEFT JOIN categories c ON c.id = p.category_id
+            WHERE p.category_id =  {$this->security->xss_clean($main['category_id'])} 
+            AND p.id!={$this->security->xss_clean($id)}
+            LIMIT 3")->result_array();
     }
 // ============= END OF GETTERS ============= //
 
@@ -190,6 +188,16 @@ function update_image($data){
     $main = $this->check_main($_FILES['images']['name'], $data);
 }
 
+function update_main($data){
+    $this->db->query(
+        "UPDATE products
+        SET images = JSON_ARRAY_APPEND(images, '$.extras', JSON_EXTRACT(images,'$.main_pic')), 
+        images = JSON_REPLACE(images, '$.main_pic', JSON_VALUE(images,'$.extras[0]')), 
+        images = JSON_REMOVE(images,'$.extras[0]'), updated_at=NOW()
+        WHERE id = {$data['product_id']}"
+    );
+}
+
 function update_product($data){
     $query="UPDATE products SET category_id=?,product_name=?,description=?,price=?,stock=?,updated_at=NOW() WHERE id = ?";
     $values=array(
@@ -212,8 +220,6 @@ function delete_image($data){
 }
 
 function add_new_category($data){
-    // echo "INSERT INTO categories (category, created_at, updated_at) VALUES('{$this->security->xss_clean($data['category'])}', NOW(), NOW())";
-    // die();
     $this->db->query("INSERT INTO categories (category, created_at, updated_at) VALUES('{$this->security->xss_clean($data['category'])}', NOW(), NOW())");
     return $this->db->insert_id();
 

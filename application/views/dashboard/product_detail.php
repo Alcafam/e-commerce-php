@@ -23,7 +23,7 @@
     
         <?= ($this->session->flashdata('input_errors'))? $this->session->flashdata('input_errors'):'' ?>
         <form method="POST" action="<?= base_url('add_to_cart') ?>">
-            <input type="hidden" name="<?=$this->security->get_csrf_token_name();?>" value="<?=$this->security->get_csrf_hash();?>" />
+            <input type="hidden" name="<?=$this->security->get_csrf_token_name();?>" value="<?=$this->security->get_csrf_hash();?>"/>
             <input name="product_id" value="<?= $product['id'] ?>" hidden>
             <input name="stocks" value="<?= $product['stock'] ?>" hidden>
             <div class="mb-3 w-50 row mx-1">
@@ -41,6 +41,21 @@
             </div>
         </form>
     </div>
+</div>
+<div class="row mt-5" >
+    <h1 class="fs-3">Similar Products</h1>
+<?php   foreach($similar_products as $prod){ 
+?>          <div class="col-lg-2 d-flex align-items-stretch">
+                <a href="<?= base_url('view_product/'.$prod['id']) ?>" class="card m-1 text-decoration-none">
+                    <img src="<?= base_url('assets/images/products/'.$prod['id'].'/'.$prod['main_pic'])?>" class="img-fluid"  alt="..." >
+                    <div class="card-body">
+                        <h5 class="card-title"><?= $prod['product_name'] ?></h5>
+                        <p class="card-text">&#8369; <?= $prod['price'] ?></p>
+                    </div>
+                </a>
+            </div>
+<?php   }
+?>
 </div>
 
 <script>var price=<?= $product['price'] ?></script>

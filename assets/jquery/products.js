@@ -3,12 +3,12 @@ $( document ).ready(function() {
     var last_row;
     var files = [];
 
-// ON PAGE RELOAD
+// =========== ON PAGE RELOAD =========== //
     $.post(base_url+'get_product_table', function(res) {
         $('#product_cards').html(res);
     });
 
-// FILTER EVENTS
+// =========== FILTER EVENTS =========== //
     $(document).on('keyup','#search_filter',function(){
         $('#filter_form').submit();        
     })
@@ -36,7 +36,7 @@ $( document ).ready(function() {
         return false;
     });
 
-// CRUD EVENTS
+// =========== CRUD EVENTS =========== //
     $(document).on('click', '#add_product', function(){
         $('#submit_modal_btn').attr('value', "ADD");
         $('#modal_title').text('ADD PRODUCT');
@@ -60,7 +60,7 @@ $( document ).ready(function() {
         $('#add_update_product_modal').modal('show');
     })
 
-    // ADD IMAGE PREVIEW
+    // =========== ADD IMAGE PREVIEW =========== //
     $(document).on('change', '#modal_image', function(){
         $("#frames").html('');
         for (var i = 0; i < $(this)[0].files.length; i++) {
@@ -102,7 +102,7 @@ $( document ).ready(function() {
         })
     })
 
-    // UPDATE IMAGE PREVIEW
+    // =========== UPDATE IMAGE PREVIEW =========== //
     function set_update_frames(paths){
         $.each(paths, function(key, value) {
             $("#update_frames").append(
@@ -126,7 +126,7 @@ $( document ).ready(function() {
     }
     
 
-// AJAX
+// =========== AJAX =========== //
     $(document).on('submit', '#add_update_form', function(){
         let form_data = new FormData();
         let url;
@@ -169,8 +169,9 @@ $( document ).ready(function() {
                     $('#modal_messages').html(response);
                 }else{
                     $('#add_update_product_modal').modal('hide');
-                    $('#message_modal_body').prepend('<h1>'+message+'</h1>');
+                    $('#message_modal_body').html('<h1>'+message+'</h1>');
                     $('#message_modal').modal('show');
+                    files=[];
                 }
             }, error:function(error){
                 $('#product_cards').html(error.responseText);
@@ -179,8 +180,9 @@ $( document ).ready(function() {
         return false;
     })
 
-// ON MODAL CLOSE & STYLING EVENTS
+// =========== ON MODAL CLOSE & STYLING EVENTS =========== //
     $('#message_modal').on('hide.bs.modal', function(){
+        $('#message_modal_body').empty();
         $('#filter_form').submit();
     })
 
@@ -189,6 +191,7 @@ $( document ).ready(function() {
         $('#update_frames').empty();
         $('#frames').empty();
         $('#modal_messages').empty();
+        $('#modal_category').prop("selectedIndex", 0);
         $('#filter_form').submit();
     })
 
@@ -196,7 +199,7 @@ $( document ).ready(function() {
         $('.main_pic').not(this).prop('checked', false);     
     })
 
-// CATEGORY THINGY
+// =========== CATEGORY THINGY =========== //
     $(document).on('change','#modal_category',function(){
         if($(this).val()=="add_category_btn"){
             $('#new_category').removeAttr('hidden');

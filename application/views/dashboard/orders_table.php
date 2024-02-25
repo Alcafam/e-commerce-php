@@ -36,7 +36,7 @@
                 <td><?= $prod['order_date'] ?></td>
                 <td>
                     <span class="d-block fw-bold"><?= $prod['name'] ?></span>
-                    <span class="d-block"><?= $prod['address'] ?></span>
+                    <span class="d-block"><?= $prod['shipping'] ?></span>
                 </td>
                 <td>&#8369; <?= number_format($prod['price'] * $prod['quantity'], 2) ?></td>
                 <td>

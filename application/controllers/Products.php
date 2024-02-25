@@ -7,16 +7,21 @@ class Products extends CI_Controller {
 		parent::__construct();
 		$this->load->model('User');
         $this->load->model('Product');
+        $this->load->model('Cart');
         define ('SITE_ROOT', realpath(dirname(__FILE__)));
  	}
 
+// =========== INITIALIZER =========== //
     function init(){
 		$sess_like_data['name'] = $this->session->userdata('name');
 		$sess_like_data['user_id'] = $this->session->userdata('user_id');
         $sess_like_data['role'] = $this->session->userdata('role');
+        $sess_like_data['cart_num'] = count($this->Cart->get_carts($this->session->userdata('user_id')));
 		return $sess_like_data;
 	}
+// =========== END OF INITIALIZER =========== //
 
+// =========== VIEW RELATED FUNCTIONS =========== //
     function load_view($title, $view_data){
         $view_data['title'] = $title;
         $this->load->view('layout/header', $view_data);
@@ -50,20 +55,40 @@ class Products extends CI_Controller {
             }
 
             $view_data['products']=$this->Product->get_filtered_product($filters);
-            $view_data['pages'] = $this->Product->get_pages(count($view_data['products']));
+            $view_data['pages'] = $this->Product->get_pages(count($view_data['products']),5);
             $view_data['filter'] = "Search Result (".count($view_data['products']).")";
         }else if(!$this->input->post('last_row') && empty($this->input->post('search_filter')) && ($this->input->post('category') || !$this->input->post('category'))){
-            $view_data['pages'] = $this->Product->get_product_count();
+            $view_data['pages'] = $this->Product->get_product_count(5);
             $view_data['products']=$this->Product->get_products(0);
             $view_data['filter'] = "All Products(".count($view_data['products']).")";
         }else{
-            $view_data['pages'] = $this->Product->get_product_count();
+            $view_data['pages'] = $this->Product->get_product_count(5);
             $view_data['products']=$this->Product->get_products($this->input->post('last_row'));
             $view_data['filter'] = "All Products(".count($view_data['products']).")";
         }
         $this->load->view('dashboard/product_table', $view_data);
     }
 
+    function get_product_details($id){
+        $product = $this->Product->get_product_by_id($id);
+        echo json_encode($product);
+    }
+
+    function view_product($id){
+        $view_data = $this->init();
+        $view_data['product'] = $this->Product->get_product_by_id($id);
+        $view_data['similar_products'] = $this->Product->get_similar_product($id);
+        $this->load_view($view_data['product']['product_name'], $view_data);
+        if($this->session->userdata('role')==0){
+            $this->load->view('layout/user_side_nav', $view_data);
+        }else{
+            $this->load->view('layout/side_nav', $view_data);
+        }
+        $this->load->view('dashboard/product_detail', $view_data);
+    }
+// =========== END OF VIEW RELATED FUNCTIONS =========== //
+
+// =========== CRUDS =========== //
     function add_product(){
         $data = $this->input->post();
         $validation = $this->Product->validate_product($data);
@@ -75,11 +100,6 @@ class Products extends CI_Controller {
             $this->save_image($_FILES, $inserted_id);
             echo json_encode("success");
         }
-    }
-
-    function get_product_details($id){
-        $product = $this->Product->get_product_by_id($id);
-        echo json_encode($product);
     }
 
     function delete_image(){
@@ -104,6 +124,9 @@ class Products extends CI_Controller {
         }else{
             /* FILE UPLOAD */
             $id = $data['product_id'];
+            if($data['old_main'] && !$_FILES){
+                $this->Product->update_main($data);
+            }   
             if($_FILES){
                 $update = $this->Product->update_image($data);
                 $this->save_image($_FILES, $id);
@@ -145,16 +168,8 @@ class Products extends CI_Controller {
         echo json_encode($inserted_id);
     }
 
-    function view_product($id){
-        $view_data = $this->init();
-        $view_data['product'] = $this->Product->get_product_by_id($id);
-        $this->load_view($view_data['product']['product_name'], $view_data);
-        if($this->session->userdata('role')==0){
-            $this->load->view('layout/user_side_nav', $view_data);
-        }else{
-            $this->load->view('layout/side_nav', $view_data);
-        }
-        $this->load->view('dashboard/product_detail', $view_data);
-    }
+// =========== END OF CRUDS =========== //
+
+
 }
 

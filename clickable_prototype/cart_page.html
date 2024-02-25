@@ -1,0 +1,191 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="author" content="Marjy I. Galingan">
+
+    <title>Cart</title>
+    <!-- BOOTSTRAP -->
+    <link rel="stylesheet" type="text/css" href="assets/css/darkly_bootstraps.css">
+    <!-- CSS -->
+    <link rel="stylesheet" type="text/css" href="assets/css/my_styles.css">
+    <link rel="stylesheet" type="text/css" href="assets/css/side_navs.css">
+    <link rel="stylesheet" type="text/css" href="assets/css/fontawesome.css">
+    <!-- JQUERY DEPENDENCIES -->
+    <script src="assets/dependencies/jquery.js"></script>
+    <script src="assets/dependencies/bootstrap.js"></script>
+    <!-- JQUERY -->
+          <script src="assets/jquery/cartss.js"></script>
+    <script>
+        $(document).ready(function () {
+            $('#sidebarCollapse').on('click', function () {
+                $('#sidebar').toggleClass('active');
+            });
+        });
+    </script>
+    
+
+    <!-- CONSTANTS -->
+    <script>
+        const base_url = "";
+    </script>
+</head>
+<body><nav class="navbar navbar-expand-lg bg-primary fixed-top p-0 navbar-fixed-top">
+    <div class="container-fluid">
+        <ul class="navbar-nav justify-content-start ">
+            <li class="nav-item px-3 py-2">
+                <a href="/" class="nav-link text-white px-3 m-0 p-0" aria-current="page">
+                    <img class="img-fluid m-0 p-0" src="assets/images/logo_white.png" width="100px" alt="DPWH Logo"/>
+                </a>
+            </li>
+        </ul>
+        <ul class="nav justify-content-end">
+            <li class="px-3 py-2 fs-6 fst-italic ">
+                <div>"Right Product, Right Cost, Right Quality,</div>
+                <div>Right on Time, Right People"</div>
+            </li>
+          <li class="nav-item">
+                <a class="nav-link text-white fw-bold px-3 py-2 fs-5" href="logout">Logout</a>
+            </li>
+        </ul>
+    </div>
+</nav><div class="wrapper">
+	<!-- Sidebar  -->
+	<nav id="sidebar" style="padding-top:80px">
+		<ul class="list-unstyled components">
+			<li >
+				<a href="">Catalogs</a>
+			</li>
+		</ul>
+		<ul class="list-unstyled components">
+			<li >
+				<a href=""><i class="fa-solid fa-user fa-2xl pe-3"></i>Profile</a>
+			</li>
+			<li class="active mt-3">
+				<a href=""><i class="fa-solid fa-cart-shopping fa-2xl pe-3"></i>Cart (2)</a>
+			</li>
+		</ul>
+	</nav>
+
+	<!-- Page Content  -->
+	<div id="content">
+		<nav class="navbar mt-5">
+			<button type="button" id="sidebarCollapse" class="rounded-end-3">
+			&#9776;
+			</button>
+		</nav>
+		<div id="main" class="py-0 text-black">
+
+
+
+<div id="cart_div" class="row">
+    <div class="col-2">
+        <form method="POST" id="filter_form">
+          <a href="javascript:void(0)" class="category_button text-white text-decoration-none py-3 my-1 rounded-2 text-center w-50 active" data-id="On-Cart">
+                <span>On-Cart</span>
+            </a>
+          <a href="javascript:void(0)" class="category_button text-white text-decoration-none py-3 my-1 rounded-2 text-center w-50 " data-id="Pending">
+                <span>Pending</span>
+            </a>
+          <a href="javascript:void(0)" class="category_button text-white text-decoration-none py-3 my-1 rounded-2 text-center w-50 " data-id="On-Process">
+                <span>On-Process</span>
+            </a>
+          <a href="javascript:void(0)" class="category_button text-white text-decoration-none py-3 my-1 rounded-2 text-center w-50 " data-id="Shipped">
+                <span>Shipped</span>
+            </a>
+          <a href="javascript:void(0)" class="category_button text-white text-decoration-none py-3 my-1 rounded-2 text-center w-50 " data-id="Delivered">
+                <span>Delivered</span>
+            </a>
+            
+        </form>
+
+    </div>
+
+    <div class="col-6">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th scope="col" width="50%">Order</th>
+                    <th scope="col" width="20%">Unit Price</th>
+                    <th scope="col" width="20%">Total Price</th>
+                    <th scope="col" width="10%"></th>
+                </tr>
+            </thead>
+            <tbody>
+              <tr>
+                    <th class="align-middle">
+                        <img height="100px" src="assets/images/products/6/25.png">
+                        White Long Sleeve Blouse (4)
+                    </th>
+                    <td class="align-middle">₱ 469.00</td>
+                    <td class="align-middle">₱ 1,876.00</td>
+                    <td class="align-middle"><a href=""><i class="fa-solid fa-xmark fa-2xl"></i></a></td>
+              
+                </tr>
+              <tr>
+                    <th class="align-middle">
+                        <img height="100px" src="assets/images/products/17/21.png">
+                        Denim Pant (2)
+                    </th>
+                    <td class="align-middle">₱ 599.00</td>
+                    <td class="align-middle">₱ 1,198.00</td>
+                    <td class="align-middle"><a href=""><i class="fa-solid fa-xmark fa-2xl"></i></a></td>
+              
+                </tr>
+          </tbody>
+        </table>
+    </div>
+ 
+    <div class="col">
+        <h1 class="fs-4">Checkout</h1>
+        <form id="checkout_form">
+            <div class="row" id="shipping">
+                <p class="fw-bold fs-5 d-inline-block w-50">Shipping Information</p> 
+                <div class="d-inline-block w-50"><input type="checkbox" class="me-2" id="same_as_billing" name="same_as_billing" checked="">Same as billing</div>
+                <div class="col mb-2">
+                    <input type="text" class="form-control" placeholder="First name" aria-label="First name" id="first_name" name="shipping[first_name]">
+                </div>
+                <div class="col mb-2">
+                    <input type="text" class="form-control" placeholder="Last name" aria-label="Last name" id="last_name" name="shipping[last_name]">
+                </div>
+                <div class="col-12 mb-2">
+                    <input type="text" class="form-control" id="address_1" name="shipping[address_1]" placeholder="Address 1">
+                </div>
+                <div class="col-12 mb-2">
+                    <input type="text" class="form-control" id="address_2" name="shipping[address_2]" placeholder="Address 2">
+                </div>
+                <div class="col mb-2">
+                    <input type="text" class="form-control" placeholder="City" aria-label="City" id="city" name="shipping[city]">
+                </div>
+                <div class="col mb-2">
+                    <input type="text" class="form-control" placeholder="State" aria-label="State" id="state" name="shipping[state]">
+                </div>
+                <div class="col mb-2">
+                    <input type="text" class="form-control" placeholder="Zipcode" aria-label="Zipcode" id="zipcode" name="shipping[zipcode]">
+                </div>
+            </div>
+            
+            <div id="order_summary">
+                <p class="fw-bold fs-5">Order Summary</p>
+                <div class="row">
+                    <div class="col fw-bold">Items</div>
+                    <div class="col" id="items">₱ 3,074.00</div>
+                </div>
+                <div class="row">
+                    <div class="col fw-bold">Shipping Fee</div>
+                    <div class="col" id="shipping_fee">₱ 250.00</div>
+                </div>
+                <div class="row">
+                    <div class="col fw-bold">Total Amount</div>
+                    <div class="col" id="total_amount" data="3324">₱ 3,324.00</div>
+                </div>
+            </div>
+        </form>
+        <button id="proceed_checkout" class="btn btn-success">Proceed to Checkout</button>
+        <div id="message_area"></div>
+    </div>
+</div>
+		<!-- </div>
+	</div>
+</div> -->

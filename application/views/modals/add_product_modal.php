@@ -55,7 +55,8 @@
 <div class="modal" tabindex="-1" id="message_modal">
     <div class="modal-dialog">
         <div class="modal-content">
-            <div class="modal-body bg-white text-center" id="message_modal_body">
+            <div class="modal-body bg-white text-center" >
+                <div id="message_modal_body"></div>
                 <button type="button" class="btn btn-warning" data-bs-dismiss="modal" aria-label="Close">Ok</button>
             </div>
         </div>

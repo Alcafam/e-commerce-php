@@ -14,17 +14,15 @@ class Order extends CI_Model
 
     function get_all_order_count(){
         return count($this->db->query(
-            "SELECT od.* FROM orders o
-                LEFT JOIN order_details od ON od.order_id = o.id
-            WHERE o.status_id != 5"
+            "SELECT * FROM orders o
+            WHERE o.status_id != 1"
         )->result_array());
     }
 
     function get_order_count(){
         $total = $this->db->query(
-            "SELECT COUNT(*) AS total FROM orders o
-                LEFT JOIN order_details od ON od.order_id = o.id
-            WHERE o.status_id != 5"
+            "SELECT COUNT(*) AS total FROM orders
+            WHERE status_id != 1"
         )->result_array();
             $last_rows=array();
             for($i=0; $i<=$total[0]['total']; $i+=5){
@@ -53,54 +51,42 @@ class Order extends CI_Model
 
 // ============= ORDER-RELATED SQL ============= // 
     function orders_select_query(){
-        return "SELECT p.id, p. price, p.images->>'$.main_pic' AS 'image', c.category, od.quantity, CONCAT(u.first_name,' ',u.last_name) AS 'name', DATE_FORMAT(o.updated_at,'%m/%d/%Y') AS 'order_date', o.status_id, o.id as 'order_id',
-        CONCAT_WS(
-            IF(LENGTH(JSON_VALUE(o.shipping_address,'$.house')),CONCAT(JSON_VALUE(o.shipping_address,'$.house'), ', '),''),
-            IF(LENGTH(JSON_VALUE(o.shipping_address,'$.street')),CONCAT(JSON_VALUE(o.shipping_address,'$.street'), ', '),''),
-            IF(LENGTH(JSON_VALUE(o.shipping_address,'$.city')),CONCAT(JSON_VALUE(o.shipping_address,'$.city'), ', '),''),
-            IF(LENGTH(JSON_VALUE(o.shipping_address,'$.barangay')),CONCAT(JSON_VALUE(o.shipping_address,'$.barangay'), ', '),''),
-            IF(LENGTH(JSON_VALUE(o.shipping_address,'$.province')),CONCAT(JSON_VALUE(o.shipping_address,'$.province'), ', '),''),
-            IF(LENGTH(JSON_VALUE(o.shipping_address,'$.zipcode')),JSON_VALUE(o.shipping_address,'$.zipcode'),'')
-        ) AS 'address'";
+        return "SELECT p.id, p. price, p.images->>'$.main_pic' AS 'image', c.category, o.quantity, CONCAT(JSON_VALUE(o.shipping,'$.first_name'),' ',JSON_VALUE(o.shipping,'$.last_name')) AS 'name', DATE_FORMAT(o.updated_at,'%m/%d/%Y') AS 'order_date', o.status_id, o.id as 'order_id',
+        CONCAT(
+            IF(LENGTH(JSON_VALUE(o.shipping,'$.address_1')),CONCAT(JSON_VALUE(o.shipping,'$.address_1'), ', '),''),
+            IF(LENGTH(JSON_VALUE(o.shipping,'$.address_2')),CONCAT(JSON_VALUE(o.shipping,'$.address_2'), ', '),''),
+            IF(LENGTH(JSON_VALUE(o.shipping,'$.city')),CONCAT(JSON_VALUE(o.shipping,'$.city'), ', '),''),
+            IF(LENGTH(JSON_VALUE(o.shipping,'$.state')),CONCAT(JSON_VALUE(o.shipping,'$.state'), ', '),''),
+            IF(LENGTH(JSON_VALUE(o.shipping,'$.zipcode')),CONCAT(JSON_VALUE(o.shipping,'$.zipcode'), ', '),'')
+        ) AS shipping ";
     }
     function get_orders($last_row){
         $query = $this->orders_select_query(). 
-            " FROM products AS p 
-                LEFT JOIN categories c
-                    ON c.id = p.category_id
-                LEFT JOIN order_details od
-                    ON od.product_id = p.id
-                LEFT JOIN orders o
-                    ON o.id = od.order_id
-                LEFT JOIN users u
-                    ON u.id = o.user_id
-            WHERE o.status_id != 5 LIMIT {$last_row}, 5";
+            "FROM orders o
+                LEFT JOIN products p ON p.id = o.product_id
+                LEFT JOIN categories c ON c.id = p.category_id
+                LEFT JOIN users u ON u.id = o.user_id
+            WHERE o.status_id != 1 LIMIT {$last_row}, 5";
         $results = $this->db->query($query)->result_array();
         return $results;
     }
 
     function get_filtered_orders($filters){
         $query = $this->orders_select_query(). 
-            ", s.status
-                FROM products AS p 
-                LEFT JOIN categories c
-                    ON c.id = p.category_id
-                LEFT JOIN order_details od
-                    ON od.product_id = p.id
-                LEFT JOIN orders o
-                    ON o.id = od.order_id
-                LEFT JOIN users u
-                    ON u.id = o.user_id
-            LEFT JOIN statuses s
-            ON s.id = o.status_id
-            WHERE o.status_id != 5
+            ", stat.status
+            FROM orders o
+                LEFT JOIN products p ON p.id = o.product_id
+                LEFT JOIN categories c ON c.id = p.category_id
+                LEFT JOIN users u ON u.id = o.user_id
+                LEFT JOIN statuses stat ON stat.id = o.status_id
+            WHERE o.status_id != 1
                 AND (p.product_name LIKE '%{$this->security->xss_clean($filters['search_filter'])}%'
-                    OR p.id LIKE '%{$this->security->xss_clean($filters['search_filter'])}%'
-                    OR s.status LIKE '%{$this->security->xss_clean($filters['search_filter'])}%'
+                OR p.id LIKE '%{$this->security->xss_clean($filters['search_filter'])}%'
+                OR stat.status LIKE '%{$this->security->xss_clean($filters['search_filter'])}%'
                 )
             ";
         if(!empty($filters['status'])){
-            $query .= " AND s.status = '{$this->security->xss_clean($filters['status'])}'";
+            $query .= " AND stat.status = '{$this->security->xss_clean($filters['status'])}'";
         }
 
         $results = $this->db->query($query)->result_array();
@@ -113,7 +99,7 @@ class Order extends CI_Model
             FROM statuses s
                 LEFT JOIN orders o 
                     ON o.status_id = s.id
-            WHERE s.id !=5
+            WHERE s.id !=1
             GROUP BY s.id"
         )->result_array();
         $results = array_filter($results);

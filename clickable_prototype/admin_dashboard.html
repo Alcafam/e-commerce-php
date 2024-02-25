@@ -1,0 +1,260 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="author" content="Marjy I. Galingan">
+
+    <title>Order Dashboard - Emmeness</title>
+    <!-- BOOTSTRAP -->
+    <link rel="stylesheet" type="text/css" href="assets/css/darkly_bootstraps.css">
+    <!-- CSS -->
+    <link rel="stylesheet" type="text/css" href="assets/css/my_styles.css">
+    <link rel="stylesheet" type="text/css" href="assets/css/side_navs.css">
+    <link rel="stylesheet" type="text/css" href="assets/css/fontawesome.css">
+    <!-- JQUERY DEPENDENCIES -->
+    <script src="assets/dependencies/jquery.js"></script>
+    <script src="assets/dependencies/bootstrap.js"></script>
+    <!-- JQUERY -->
+          <script src="assets/jquery/orders.js"></script>
+    <script>
+        $(document).ready(function () {
+            $('#sidebarCollapse').on('click', function () {
+                $('#sidebar').toggleClass('active');
+            });
+        });
+    </script>
+    
+
+    <!-- CONSTANTS -->
+    <script>
+        const base_url = "";
+    </script>
+</head>
+<body><nav class="navbar navbar-expand-lg bg-primary fixed-top p-0 navbar-fixed-top">
+    <div class="container-fluid">
+        <ul class="navbar-nav justify-content-start ">
+            <li class="nav-item px-3 py-2">
+                <a href="/" class="nav-link text-white px-3 m-0 p-0" aria-current="page">
+                    <img class="img-fluid m-0 p-0" src="assets/images/logo_white.png" width="100px" alt="DPWH Logo"/>
+                </a>
+            </li>
+        </ul>
+        <ul class="nav justify-content-end">
+            <li class="px-3 py-2 fs-6 fst-italic ">
+                <div>"Right Product, Right Cost, Right Quality,</div>
+                <div>Right on Time, Right People"</div>
+            </li>
+          <li class="nav-item">
+                <a class="nav-link text-white fw-bold px-3 py-2 fs-5" href="">Logout</a>
+            </li>
+        </ul>
+    </div>
+</nav><div class="wrapper">
+	<!-- Sidebar  -->
+	<nav id="sidebar" style="padding-top:80px">
+		<ul class="list-unstyled components">
+			<li class="active">
+				<a href="">Orders</a>
+			</li>
+			
+			<li >
+				<a href="">Product</a>
+			</li>
+		</ul>
+	</nav>
+
+	<!-- Page Content  -->
+	<div id="content">
+		<nav class="navbar mt-5">
+			<button type="button" id="sidebarCollapse" class="rounded-end-3">
+			&#9776;
+			</button>
+		</nav>
+		<div id="main" class="py-0 text-black container">
+			
+		<!-- </div>
+	</div>
+</div> --><div class="w-50">
+    <form id="filter_form" method="POST" class="text-center d-flex">
+        <input class="form-control me-2" type="search" name="search_filter" id="search_filter" placeholder="search order" aria-label="Search">
+    </form>
+</div>
+<div class="row mt-5" id="product_table">
+    <div class="col-2">
+        <a href="javascript:void(0)" class="category_button text-white text-decoration-none position-relative py-3 my-1 rounded-2 text-center w-50 active">
+            <span class="absolute-cat-num">9</span>
+            <span>All Products</span>
+        </a>
+          <a href="javascript:void(0)" class="category_button text-white text-decoration-none position-relative py-3 my-1 rounded-2 text-center w-50 " data-id="Pending">
+                <span class="absolute-cat-num">3</span>
+                <span>Pending</span>
+            </a>
+          <a href="javascript:void(0)" class="category_button text-white text-decoration-none position-relative py-3 my-1 rounded-2 text-center w-50 " data-id="On-Process">
+                <span class="absolute-cat-num">3</span>
+                <span>On-Process</span>
+            </a>
+          <a href="javascript:void(0)" class="category_button text-white text-decoration-none position-relative py-3 my-1 rounded-2 text-center w-50 " data-id="Shipped">
+                <span class="absolute-cat-num">1</span>
+                <span>Shipped</span>
+            </a>
+          <a href="javascript:void(0)" class="category_button text-white text-decoration-none position-relative py-3 my-1 rounded-2 text-center w-50 " data-id="Delivered">
+                <span class="absolute-cat-num">2</span>
+                <span>Delivered</span>
+            </a>
+    </div>
+    
+    <div class="col-10">
+        <table class="table table-bordered table-hover">
+            <thead>
+                <tr class="bg-info">
+                    <th scope="col" width="25%">All Orders(5)</th>
+                    <th scope="col" width="10%">Order ID#</th>
+                    <th scope="col" width="10%">Order Date</th>
+                    <th scope="col" width="25%">Receiver</th>
+                    <th scope="col" width="10%">Total Amount</th>
+                    <th scope="col" width="10%">Status</th>
+                </tr>
+            </thead>
+            <tbody>
+              <tr>
+                    <th>
+                        <img height="100px" src="assets/images/products/4/14.png">
+                        <span>3 items</span>
+                    </th>
+                    <td>1</td>
+                    <td>02/25/2024</td>
+                    <td>
+                        <span class="d-block fw-bold">sdads dasda</span>
+                        <span class="d-block">sdasdasd, sdasd, sada, sdad, ad, </span>
+                    </td>
+                    <td>₱ 3,717.00</td>
+                    <td>
+                        <select class="edit_status" data-id="1">
+                          <option value="2" selected="">Pending</option>
+                          <option value="3">On-Process</option>
+                          <option value="4">Shipped</option>
+                          <option value="5">Delivered</option>
+                      </select>
+                    </td>
+                </tr>
+              <tr>
+                    <th>
+                        <img height="100px" src="assets/images/products/16/7.png">
+                        <span>3 items</span>
+                    </th>
+                    <td>11</td>
+                    <td>02/21/2024</td>
+                    <td>
+                        <span class="d-block fw-bold">Marjy Galingan</span>
+                        <span class="d-block">dfasfasf, dsfsadf, dfas, asfdsa, fafa, </span>
+                    </td>
+                    <td>₱ 1,401.00</td>
+                    <td>
+                        <select class="edit_status" data-id="11">
+                          <option value="2" selected="">Pending</option>
+                          <option value="3">On-Process</option>
+                          <option value="4">Shipped</option>
+                          <option value="5">Delivered</option>
+                      </select>
+                    </td>
+                </tr>
+              <tr>
+                    <th>
+                        <img height="100px" src="assets/images/products/18/8.png">
+                        <span>2 items</span>
+                    </th>
+                    <td>14</td>
+                    <td>02/26/2024</td>
+                    <td>
+                        <span class="d-block fw-bold">Emme Ferson</span>
+                        <span class="d-block">dsads, sdasdad, sdsad, sd, sdsad, </span>
+                    </td>
+                    <td>₱ 934.00</td>
+                    <td>
+                        <select class="edit_status" data-id="14">
+                          <option value="2" selected="">Pending</option>
+                          <option value="3">On-Process</option>
+                          <option value="4">Shipped</option>
+                          <option value="5">Delivered</option>
+                      </select>
+                    </td>
+                </tr>
+              <tr>
+                    <th>
+                        <img height="100px" src="assets/images/products/2/2.png">
+                        <span>1 items</span>
+                    </th>
+                    <td>3</td>
+                    <td>02/26/2024</td>
+                    <td>
+                        <span class="d-block fw-bold">Ethel Joyce</span>
+                        <span class="d-block">Purok 1, North Sanitary Camp, Baguio, Benguet, 2600, </span>
+                    </td>
+                    <td>₱ 1,499.00</td>
+                    <td>
+                        <select class="edit_status" data-id="3">
+                          <option value="2">Pending</option>
+                          <option value="3" selected="">On-Process</option>
+                          <option value="4">Shipped</option>
+                          <option value="5">Delivered</option>
+                      </select>
+                    </td>
+                </tr>
+              <tr>
+                    <th>
+                        <img height="100px" src="assets/images/products/6/25.png">
+                        <span>1 items</span>
+                    </th>
+                    <td>8</td>
+                    <td>02/21/2024</td>
+                    <td>
+                        <span class="d-block fw-bold">Ethel Joyce</span>
+                        <span class="d-block">Purok 1, North Sanitary Camp, Baguio, Benguet, 2600, </span>
+                    </td>
+                    <td>₱ 469.00</td>
+                    <td>
+                        <select class="edit_status" data-id="8">
+                          <option value="2">Pending</option>
+                          <option value="3" selected="">On-Process</option>
+                          <option value="4">Shipped</option>
+                          <option value="5">Delivered</option>
+                      </select>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    <div id="pagination" class="text-center">
+              <a href="javascript:void(0)" class="mx-1 text-info text-decoration-none p-2 text-white bg-dark" id="go_to_page" data-id="0">1</a>
+              <a href="javascript:void(0)" class="mx-1 text-info text-decoration-none p-2 text-white bg-dark" id="go_to_page" data-id="5">2</a>
+    </div>
+    </div>
+</div>
+    <div class="modal" tabindex="-1" id="are_you_sure_modal">
+    <div class="modal-dialog">
+        <div class="modal-content text-center">
+            <div class="modal-body bg-white">
+                <h1>Are you sure?</h1>
+                <form id="update_status_form" method="POST">
+                    <input id="form_order_id" name="order_id" hidden>
+                    <input id="form_status_id" name="status_id" hidden>
+                    <input type="submit" class="btn btn-success" value="Yes">
+                    <button type="button" class="btn btn-danger" data-bs-dismiss="modal" aria-label="Close">Cancel</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal" tabindex="-1" id="message_modal">
+    <div class="modal-dialog">
+        <div class="modal-content text-center">
+            <div class="modal-body bg-white" id="message_modal_body">
+                <h1>Successfully Updated Status!</h1>
+                <button type="button" class="btn btn-warning" data-bs-dismiss="modal" aria-label="Close">Ok</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+    

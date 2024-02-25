@@ -6,6 +6,7 @@ class Users extends CI_Controller {
 	function __construct(){
 		parent::__construct();
 		$this->load->model('User');
+        $this->load->model('Cart');
  	}
 
 	function index(){	
@@ -93,6 +94,43 @@ class Users extends CI_Controller {
             }
         }
 	}
+
+    // VIEW PROFILE
+    function profile_layout(){
+        $view_data['title'] = "Profile";
+        $view_data['cart_num'] = count($this->Cart->get_carts($this->session->userdata('user_id')));
+        $view_data['user_id'] = $this->session->userdata('user_id');
+        $this->load->view('layout/header', $view_data);
+        $this->load->view('layout/navbar', $view_data);
+        $this->load->view('layout/user_side_nav', $view_data);
+    }
+
+    function get_profile(){
+        $view_data['profile'] = $this->User->get_user_by_id($this->session->userdata('user_id'));
+        $this->load->view('dashboard/view_user_profile',$view_data);
+        $this->load->view('modals/add_update_address');
+    }
+
+    function get_address(){
+        $id = $this->input->post();
+        $address=$this->User->get_address_by_id($id['id']);
+        echo json_encode($address);
+    }
+
+    function add_update_address_process(){
+        $data=$this->input->post();
+        $validation = $this->User->validate_address();
+        if($validation!="success"){
+            echo $validation;
+        }else{
+            if(isset($data['address_id'])){
+                $this->User->edit_address($data);
+            }else{
+                $this->User->add_address($this->session->userdata('user_id'), $data);
+            }
+            echo "success";
+        }
+    }
 
     // INITIALIZERS
     function init_sessions($user){
