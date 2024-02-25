@@ -1,4 +1,12 @@
 ###################
+Important Notes from Owner:Marjy
+###################
+- This project is using Stripe Appi 
+- Converted some online scripts to offline (see assets/dependencies folder)
+- Uploaded images are saved in assets/products folder
+
+
+###################
 What is CodeIgniter
 ###################
 
