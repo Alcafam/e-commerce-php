@@ -98,7 +98,7 @@ class Product extends CI_Model
 
     function get_product_by_id($id){
         $results = $this->db->query(
-            "SELECT p.*, JSON_EXTRACT(p.images,'$.main_pic') AS main_pic, JSON_EXTRACT(p.images,'$.extras') AS extras, c.category
+            "SELECT p.*, JSON_VALUE(p.images,'$.main_pic') AS main_pic, JSON_VALUE(p.images,'$.extras') AS extras, c.category
             FROM products p
             LEFT JOIN categories c ON c.id = p.category_id
             WHERE p.id =  {$this->security->xss_clean($id)}")->result_array()[0];
@@ -119,7 +119,7 @@ class Product extends CI_Model
         $main = $this->db->query(
             "SELECT p.category_id FROM products p WHERE p.id = {$this->security->xss_clean($id)}")->result_array()[0];
         return $this->db->query(
-            "SELECT p.*, JSON_EXTRACT(p.images,'$.main_pic') AS main_pic, JSON_EXTRACT(p.images,'$.extras') AS extras, c.category
+            "SELECT p.*, JSON_VALUE(p.images,'$.main_pic') AS main_pic, JSON_VALUE(p.images,'$.extras') AS extras, c.category
             FROM products p
             LEFT JOIN categories c ON c.id = p.category_id
             WHERE p.category_id =  {$this->security->xss_clean($main['category_id'])} 
@@ -191,8 +191,8 @@ function update_image($data){
 function update_main($data){
     $this->db->query(
         "UPDATE products
-        SET images = JSON_ARRAY_APPEND(images, '$.extras', JSON_EXTRACT(images,'$.main_pic')), 
-        images = JSON_REPLACE(images, '$.main_pic', JSON_EXTRACT(images,'$.extras[0]')), 
+        SET images = JSON_ARRAY_APPEND(images, '$.extras', JSON_VALUE(images,'$.main_pic')), 
+        images = JSON_REPLACE(images, '$.main_pic', JSON_VALUE(images,'$.extras[0]')), 
         images = JSON_REMOVE(images,'$.extras[0]'), updated_at=NOW()
         WHERE id = {$data['product_id']}"
     );
@@ -255,7 +255,7 @@ function check_main($new_images, $old_images){
     if($old_images['old_main'] == "changed"){
         $old_main = $this->db->query(
             "UPDATE products
-            SET images = JSON_ARRAY_APPEND(images, '$.extras', JSON_EXTRACT(images, '$.main_pic')), updated_at=NOW()
+            SET images = JSON_ARRAY_APPEND(images, '$.extras', JSON_VALUE(images, '$.main_pic')), updated_at=NOW()
             WHERE id = {$old_images['product_id']}"
         );
         $new_main = $this->db->query(

@@ -20,12 +20,12 @@ class User extends CI_Model
     function get_address_by_id($id){
         return $this->db->query(
             "SELECT 
-                JSON_EXTRACT(address, '$.house') as house,
-                JSON_EXTRACT(address, '$.street') as street,
-                JSON_EXTRACT(address, '$.city') as city,
-                JSON_EXTRACT(address, '$.barangay') as barangay,
-                JSON_EXTRACT(address, '$.province') as province,
-                JSON_EXTRACT(address, '$.zipcode') as zipcode
+                JSON_VALUE(address, '$.house') as house,
+                JSON_VALUE(address, '$.street') as street,
+                JSON_VALUE(address, '$.city') as city,
+                JSON_VALUE(address, '$.barangay') as barangay,
+                JSON_VALUE(address, '$.province') as province,
+                JSON_VALUE(address, '$.zipcode') as zipcode
             FROM addresses 
             WHERE id = ?", 
             $this->security->xss_clean($id)
