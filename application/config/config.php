@@ -541,5 +541,5 @@ $config['proxy_ips'] = '';
 #--------------------------------------------------------------------
 # Stripe
 #--------------------------------------------------------------------
-$config['stripe_key'] = 'pk_test_51Onh5zGd6QsiZWKgqcBH1Ikv4tdwIw7xTFNGfteu8VBGOasXV22FAacwKgmFtKZ4zjSdYGmM9MI5UWgDLQN0o4E400namiqK2a';
-$config['stripe_secret'] = 'sk_test_51Onh5zGd6QsiZWKgs8VSJaH6wjkNlfFGYyWnIMS0SyW0mMjlgsMyQDOQu8bbFb4S3b874NvqEQ9psKrF1Dw2dtdK00UNSRC0RG';
+$config['stripe_key'] = getenv('stripe_key');
+$config['stripe_secret'] = getenv('stripe_secret');
