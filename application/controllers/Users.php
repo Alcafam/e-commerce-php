@@ -87,7 +87,7 @@ class Users extends CI_Controller {
         if(!$this->session->userdata('user_id')){
             redirect(base_url('login'));
         }else{
-            if($view_data['role']==1){
+            if($this->session->userdata('role')==1){
                 redirect(base_url('orders'));
             }else{
                 redirect(base_url('catalog'));
