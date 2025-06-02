@@ -136,7 +136,7 @@ class Users extends CI_Controller {
     function init_sessions($user){
         $this->session->set_userdata(array(
             'user_id'=>$user[0]['id'], 
-            'name' => $user[0]['first_name'].' '.$user[0]['lastname'],
+            'name' => $user[0]['first_name'].' '.$user[0]['last_name'],
             'role' => $user[0]['is_admin']
         )); 
     }
