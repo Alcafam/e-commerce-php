@@ -1,23 +1,20 @@
-# Use official PHP + Apache image
+# Use official PHP 7.4 + Apache image
 FROM php:7.4-apache
 
-# Enable Apache mod_rewrite
+# Enable mod_rewrite (needed for CodeIgniter clean URLs)
 RUN a2enmod rewrite
 
-# Install extensions if needed (e.g., mysqli, pdo)
+# Install PHP extensions for MySQL
 RUN docker-php-ext-install mysqli pdo pdo_mysql
 
-# Set working directory inside container
+# Set working directory
 WORKDIR /var/www/html
 
-# Copy project files into container
+# Copy the entire CodeIgniter app into the container
 COPY . /var/www/html
 
-# Set correct permissions
+# Fix permissions for Apache
 RUN chown -R www-data:www-data /var/www/html
 
-# Optional: set up Apache config for CodeIgniter's clean URLs
-RUN sed -i 's|DocumentRoot /var/www/html|DocumentRoot /var/www/html|' /etc/apache2/sites-available/000-default.conf
-
-# Expose port 80
+# Expose port 80 (Apache default)
 EXPOSE 80
