@@ -5,20 +5,20 @@ class Cart extends CI_Model
 {
 // ============= GETTERS ============= //
     function cart_query(){
-        return "SELECT o.id as cart_id, stat.status, o.quantity, p.product_name, JSON_VALUE(p.images,'$.main_pic') as main_pic, p.id as product_id, p.price, (p.price * o.quantity) As total,
+        return "SELECT o.id as cart_id, stat.status, o.quantity, p.product_name, JSON_EXTRACT(p.images,'$.main_pic') as main_pic, p.id as product_id, p.price, (p.price * o.quantity) As total,
         CONCAT(
-            IF(LENGTH(JSON_VALUE(o.shipping,'$.address_1')),CONCAT(JSON_VALUE(o.shipping,'$.address_1'), ', '),''),
-            IF(LENGTH(JSON_VALUE(o.shipping,'$.address_2')),CONCAT(JSON_VALUE(o.shipping,'$.address_2'), ', '),''),
-            IF(LENGTH(JSON_VALUE(o.shipping,'$.city')),CONCAT(JSON_VALUE(o.shipping,'$.city'), ', '),''),
-            IF(LENGTH(JSON_VALUE(o.shipping,'$.state')),CONCAT(JSON_VALUE(o.shipping,'$.state'), ', '),''),
-            IF(LENGTH(JSON_VALUE(o.shipping,'$.zipcode')),CONCAT(JSON_VALUE(o.shipping,'$.zipcode'), ', '),'')
+            IF(LENGTH(JSON_EXTRACT(o.shipping,'$.address_1')),CONCAT(JSON_EXTRACT(o.shipping,'$.address_1'), ', '),''),
+            IF(LENGTH(JSON_EXTRACT(o.shipping,'$.address_2')),CONCAT(JSON_EXTRACT(o.shipping,'$.address_2'), ', '),''),
+            IF(LENGTH(JSON_EXTRACT(o.shipping,'$.city')),CONCAT(JSON_EXTRACT(o.shipping,'$.city'), ', '),''),
+            IF(LENGTH(JSON_EXTRACT(o.shipping,'$.state')),CONCAT(JSON_EXTRACT(o.shipping,'$.state'), ', '),''),
+            IF(LENGTH(JSON_EXTRACT(o.shipping,'$.zipcode')),CONCAT(JSON_EXTRACT(o.shipping,'$.zipcode'), ', '),'')
         ) AS shipping, 
         CONCAT(
-            IF(LENGTH(JSON_VALUE(o.billing,'$.address_1')),CONCAT(JSON_VALUE(o.billing,'$.address_1'), ', '),''),
-            IF(LENGTH(JSON_VALUE(o.billing,'$.address_2')),CONCAT(JSON_VALUE(o.billing,'$.address_2'), ', '),''),
-            IF(LENGTH(JSON_VALUE(o.billing,'$.city')),CONCAT(JSON_VALUE(o.billing,'$.city'), ', '),''),
-            IF(LENGTH(JSON_VALUE(o.billing,'$.state')),CONCAT(JSON_VALUE(o.billing,'$.state'), ', '),''),
-            IF(LENGTH(JSON_VALUE(o.billing,'$.zipcode')),CONCAT(JSON_VALUE(o.billing,'$.zipcode'), ', '),'')
+            IF(LENGTH(JSON_EXTRACT(o.billing,'$.address_1')),CONCAT(JSON_EXTRACT(o.billing,'$.address_1'), ', '),''),
+            IF(LENGTH(JSON_EXTRACT(o.billing,'$.address_2')),CONCAT(JSON_EXTRACT(o.billing,'$.address_2'), ', '),''),
+            IF(LENGTH(JSON_EXTRACT(o.billing,'$.city')),CONCAT(JSON_EXTRACT(o.billing,'$.city'), ', '),''),
+            IF(LENGTH(JSON_EXTRACT(o.billing,'$.state')),CONCAT(JSON_EXTRACT(o.billing,'$.state'), ', '),''),
+            IF(LENGTH(JSON_EXTRACT(o.billing,'$.zipcode')),CONCAT(JSON_EXTRACT(o.billing,'$.zipcode'), ', '),'')
         ) AS billing 
     FROM orders o
         LEFT JOIN statuses stat ON stat.id = o.status_id
