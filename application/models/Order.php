@@ -51,7 +51,7 @@ class Order extends CI_Model
 
 // ============= ORDER-RELATED SQL ============= // 
     function orders_select_query(){
-        return "SELECT p.id, p. price, p.images->>'$.main_pic' AS 'image', c.category, o.quantity, CONCAT(JSON_VALUE(o.shipping,'$.first_name'),' ',JSON_VALUE(o.shipping,'$.last_name')) AS 'name', DATE_FORMAT(o.updated_at,'%m/%d/%Y') AS 'order_date', o.status_id, o.id as 'order_id',
+        return "SELECT p.id, p. price, JSON_UNQUOTE(JSON_EXTRACT(p.images, '$.main_pic')) AS image, c.category, o.quantity, CONCAT(JSON_VALUE(o.shipping,'$.first_name'),' ',JSON_VALUE(o.shipping,'$.last_name')) AS 'name', DATE_FORMAT(o.updated_at,'%m/%d/%Y') AS 'order_date', o.status_id, o.id as 'order_id',
         CONCAT(
             IF(LENGTH(JSON_VALUE(o.shipping,'$.address_1')),CONCAT(JSON_VALUE(o.shipping,'$.address_1'), ', '),''),
             IF(LENGTH(JSON_VALUE(o.shipping,'$.address_2')),CONCAT(JSON_VALUE(o.shipping,'$.address_2'), ', '),''),

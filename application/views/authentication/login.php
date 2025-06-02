@@ -18,22 +18,22 @@
     </div> 
 
     <div class="bg-warning container mt-5 p-3 rounded">
-    <b>Note:</b><br>
-    For testing purposes, you can use the following accounts:
-    <ul class="mt-2">
-        <li><b>Admin Account</b><br>
-            Email: <code>admin@example.com</code><br>
-            Password: <code>12345678</code>
-        </li>
-        <li class="mt-2"><b>User Account 1</b><br>
-            Email: <code>user1@example.com</code><br>
-            Password: <code>12345678</code>
-        </li>
-        <li class="mt-2"><b>User Account 2</b><br>
-            Email: <code>user2@example.com</code><br>
-            Password: <code>12345678</code>
-        </li>
-    </ul>
-</div>
+        <b>Note:</b><br>
+        For testing purposes, you can use the following accounts:
+        <ul class="mt-2">
+            <li><b>Admin Account</b><br>
+                Email: <code>admin@example.com</code><br>
+                Password: <code>12345678</code>
+            </li>
+            <li class="mt-2"><b>User Account 1</b><br>
+                Email: <code>user1@example.com</code><br>
+                Password: <code>12345678</code>
+            </li>
+            <li class="mt-2"><b>User Account 2</b><br>
+                Email: <code>user2@example.com</code><br>
+                Password: <code>12345678</code>
+            </li>
+        </ul>
+    </div>
 </body>
 </html>
